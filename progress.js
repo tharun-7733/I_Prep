@@ -37,12 +37,82 @@ document.querySelectorAll('.sc-counter').forEach(el => {
 
 // ── Load data ──────────────────────────────────────────────────────────────
 async function loadProgress() {
+  const historyRaw = localStorage.getItem('iprep_history');
+  let history = [];
+  if (historyRaw) {
+    try { history = JSON.parse(historyRaw); } catch(e){}
+  }
+
   let data;
-  try {
-    const res = await fetch(`${API}/progress`);
-    data = await res.json();
-  } catch {
+  let SESSIONS = [];
+
+  if (history && history.length > 0) {
+    // 1. Group by date to form "sessions"
+    const grouped = {};
+    const catScores = {}; // For radar
+    
+    history.forEach(item => {
+      const d = item.date;
+      if (!grouped[d]) grouped[d] = { date: d, count: 0, totalScore: 0, categories: {} };
+      grouped[d].count++;
+      grouped[d].totalScore += item.score;
+      
+      const c = item.category || 'General';
+      grouped[d].categories[c] = (grouped[d].categories[c] || 0) + 1;
+
+      if (!catScores[c]) catScores[c] = { total: 0, count: 0 };
+      catScores[c].total += item.score;
+      catScores[c].count++;
+    });
+
+    // 2. Build sessions array
+    SESSIONS = Object.values(grouped).map(g => {
+      const avg = Math.round(g.totalScore / g.count);
+      let bestCat = Object.keys(g.categories).sort((a,b) => g.categories[b] - g.categories[a])[0];
+      let badge = avg >= 90 ? 'Excellent' : avg >= 70 ? 'Good' : avg >= 50 ? 'Needs Improvement' : 'Weak';
+      return {
+        date: g.date,
+        role: 'Mixed Role', // from local storage we don't have role saved per question
+        category: bestCat,
+        questions: g.count,
+        avg_score: avg,
+        badge: badge
+      };
+    });
+    // Sort oldest to newest for the line chart
+    SESSIONS.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+    // 3. Build top level stats
+    const totalQuestions = history.length;
+    const avgScore = Math.round(history.reduce((sum, item) => sum + item.score, 0) / totalQuestions);
+    const sessionsCompleted = SESSIONS.length;
+    let bestOverallCat = Object.keys(catScores).sort((a,b) => (catScores[b].total/catScores[b].count) - (catScores[a].total/catScores[a].count))[0];
+
+    // 4. Build radar data
+    const radar = {};
+    Object.keys(catScores).forEach(c => {
+      radar[c] = Math.round(catScores[c].total / catScores[c].count);
+    });
+
     data = {
+      total_questions: totalQuestions,
+      avg_score: avgScore,
+      best_category: bestOverallCat,
+      sessions_completed: sessionsCompleted,
+      session_scores: SESSIONS.map((s, i) => ({ label: `S${i+1}`, score: s.avg_score, date: s.date })),
+      radar: radar
+    };
+    
+    // Sort newest to oldest for history table
+    SESSIONS.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  } else {
+    // Fallback to mock data if no history
+    data = {
+      total_questions: 61,
+      avg_score: 75,
+      best_category: 'Technical Concepts',
+      sessions_completed: 7,
       session_scores: [
         {label:'S1',score:70,date:'2026-04-30'},{label:'S2',score:88,date:'2026-05-02'},
         {label:'S3',score:56,date:'2026-05-04'},{label:'S4',score:65,date:'2026-05-06'},
@@ -51,10 +121,29 @@ async function loadProgress() {
       ],
       radar: {DSA:78,'System Design':65,Behavioral:72,'Technical Concepts':88,Communication:70}
     };
+    SESSIONS = [
+      {date:'2026-05-09',role:'Backend Engineer',category:'System Design',questions:10,avg_score:82,badge:'Good'},
+      {date:'2026-05-08',role:'Backend Engineer',category:'DSA',questions:8,avg_score:74,badge:'Good'},
+      {date:'2026-05-07',role:'Full Stack Developer',category:'Technical Concepts',questions:10,avg_score:91,badge:'Excellent'},
+      {date:'2026-05-06',role:'Backend Engineer',category:'Behavioral',questions:5,avg_score:65,badge:'Good'},
+      {date:'2026-05-04',role:'System Designer',category:'System Design',questions:10,avg_score:56,badge:'Needs Improvement'},
+      {date:'2026-05-02',role:'Frontend Developer',category:'DSA',questions:8,avg_score:88,badge:'Excellent'},
+      {date:'2026-04-30',role:'Backend Engineer',category:'Technical Concepts',questions:10,avg_score:70,badge:'Good'},
+    ];
   }
+
+  // Update DOM targets dynamically
+  const counters = document.querySelectorAll('.sc-counter');
+  if(counters[0]) counters[0].dataset.target = data.total_questions;
+  if(counters[1]) counters[1].dataset.target = data.avg_score;
+  if(counters[2]) counters[2].dataset.target = data.sessions_completed;
+  
+  const bestCatEl = document.querySelector('.sc-text');
+  if(bestCatEl) bestCatEl.textContent = data.best_category.replace('Technical Concepts','Technical');
+
   drawLineChart(data.session_scores);
   drawRadar(data.radar);
-  loadHistory();
+  loadHistory(SESSIONS);
 }
 
 // ── Line Chart ─────────────────────────────────────────────────────────────
@@ -156,17 +245,12 @@ function drawRadar(data) {
 }
 
 // ── Session History ────────────────────────────────────────────────────────
-function loadHistory() {
-  const SESSIONS = [
-    {date:'2026-05-09',role:'Backend Engineer',category:'System Design',questions:10,avg_score:82,badge:'Good'},
-    {date:'2026-05-08',role:'Backend Engineer',category:'DSA',questions:8,avg_score:74,badge:'Good'},
-    {date:'2026-05-07',role:'Full Stack Developer',category:'Technical Concepts',questions:10,avg_score:91,badge:'Excellent'},
-    {date:'2026-05-06',role:'Backend Engineer',category:'Behavioral',questions:5,avg_score:65,badge:'Good'},
-    {date:'2026-05-04',role:'System Designer',category:'System Design',questions:10,avg_score:56,badge:'Needs Improvement'},
-    {date:'2026-05-02',role:'Frontend Developer',category:'DSA',questions:8,avg_score:88,badge:'Excellent'},
-    {date:'2026-04-30',role:'Backend Engineer',category:'Technical Concepts',questions:10,avg_score:70,badge:'Good'},
-  ];
+function loadHistory(SESSIONS) {
   const tbody = $('historyBody');
+  if (!SESSIONS || SESSIONS.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;">No session history yet. Start practicing!</td></tr>`;
+    return;
+  }
   tbody.innerHTML = SESSIONS.map((s,i)=>{
     const badgeClass = {Excellent:'badge-excellent',Good:'badge-good','Needs Improvement':'badge-needs',Weak:'badge-weak'}[s.badge]||'badge-good';
     return `<tr style="transition-delay:${i*0.07}s">
