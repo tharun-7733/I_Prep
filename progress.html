@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Progress Tracker — I_Prep</title>
+  <meta name="description" content="Track your interview prep progress across sessions with analytics and skill radar."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/><link rel="stylesheet" href="progress.css"/>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">&lt;I_Prep /&gt;</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="practice.html" class="nav-link">Practice</a></li>
+        <li><a href="progress.html" class="nav-link active">Progress</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-nav-ghost">Login</a>
+        <a href="practice.html" class="btn-nav-cta">Practice Now</a>
+      </div>
+    </div>
+  </nav>
+  <div class="orb orb-purple" style="width:400px;height:400px;top:-80px;left:-60px;"></div>
+  <div class="orb orb-cyan" style="width:300px;height:300px;bottom:10%;right:-40px;animation-direction:alternate-reverse;"></div>
+
+  <div class="page-wrap">
+    <header class="prog-header fade-up">
+      <div class="section-badge">Analytics</div>
+      <h1 class="page-title">Your <span class="gradient-text">Progress</span></h1>
+      <p class="page-subtitle">Performance history across all your practice sessions.</p>
+    </header>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid" id="summaryGrid">
+      <div class="summary-card glass-card fade-up">
+        <div class="sc-icon"><i class="ph-fill ph-note-pencil icon-gradient"></i></div>
+        <div class="sc-val"><span class="sc-counter" data-target="61">0</span></div>
+        <div class="sc-label">Questions Attempted</div>
+      </div>
+      <div class="summary-card glass-card fade-up" style="transition-delay:0.1s">
+        <div class="sc-icon"><i class="ph-fill ph-chart-bar icon-gradient"></i></div>
+        <div class="sc-val"><span class="sc-counter" data-target="75">0</span><span class="sc-suffix">%</span></div>
+        <div class="sc-label">Average Score</div>
+      </div>
+      <div class="summary-card glass-card fade-up" style="transition-delay:0.2s">
+        <div class="sc-icon"><i class="ph-fill ph-medal icon-gold"></i></div>
+        <div class="sc-val sc-text">Technical</div>
+        <div class="sc-label">Best Category</div>
+      </div>
+      <div class="summary-card glass-card fade-up" style="transition-delay:0.3s">
+        <div class="sc-icon"><i class="ph-fill ph-fire icon-fire"></i></div>
+        <div class="sc-val"><span class="sc-counter" data-target="7">0</span></div>
+        <div class="sc-label">Sessions Completed</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+      <!-- Line Chart -->
+      <div class="chart-card glass-card fade-up">
+        <div class="chart-header">
+          <h3 class="chart-title">Score Trend — Last 7 Sessions</h3>
+          <span class="chart-badge">Live Data</span>
+        </div>
+        <div class="line-chart-wrap">
+          <svg id="lineChart" viewBox="0 0 640 200" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="50"  x2="640" y2="50"  stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="0" y1="100" x2="640" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="0" y1="150" x2="640" y2="150" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <!-- Y labels -->
+            <text x="4" y="54"  font-size="10" fill="rgba(255,255,255,0.25)" font-family="JetBrains Mono">100</text>
+            <text x="4" y="104" font-size="10" fill="rgba(255,255,255,0.25)" font-family="JetBrains Mono">50</text>
+            <text x="4" y="154" font-size="10" fill="rgba(255,255,255,0.25)" font-family="JetBrains Mono">0</text>
+            <!-- Area fill -->
+            <path id="lineArea" d="" fill="url(#lineGrad)" opacity="0.8"/>
+            <!-- Line -->
+            <path id="linePath" d="" fill="none" stroke="#00d4ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+              stroke-dasharray="1000" stroke-dashoffset="1000"/>
+            <!-- Dots group -->
+            <g id="lineDots"></g>
+            <!-- X labels -->
+            <g id="lineLabels"></g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Radar Chart -->
+      <div class="chart-card glass-card fade-up" style="transition-delay:0.15s">
+        <div class="chart-header">
+          <h3 class="chart-title">Skill Radar</h3>
+          <span class="chart-badge">5 Categories</span>
+        </div>
+        <div class="radar-wrap">
+          <svg id="radarChart" viewBox="0 0 300 280">
+            <defs>
+              <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#7b2ff7" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid polygons drawn by JS -->
+            <g id="radarGrid"></g>
+            <polygon id="radarFill" points="" fill="url(#radarGrad)" stroke="#00d4ff" stroke-width="2" opacity="0"/>
+            <g id="radarLabels"></g>
+            <g id="radarDots"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session History Table -->
+    <div class="history-section glass-card fade-up">
+      <div class="history-header">
+        <h3 class="chart-title">Session History</h3>
+        <a href="practice.html" class="btn-primary" style="font-size:0.85rem;padding:9px 20px;">
+          + New Session <span class="btn-shimmer"></span>
+        </a>
+      </div>
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Date</th><th>Role</th><th>Category</th>
+              <th>Questions</th><th>Avg Score</th><th>Badge</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="prog-cta fade-up">
+      <a href="practice.html" class="btn-primary" style="font-size:1.05rem;padding:15px 36px;">
+        ⚡ Start a New Session
+        <span class="btn-shimmer"></span>
+      </a>
+    </div>
+  </div>
+
+  <footer class="footer"><p>© 2026 I_Prep · <a href="index.html">Home</a></p></footer>
+  <script src="progress.js"></script>
+</body>
+</html>

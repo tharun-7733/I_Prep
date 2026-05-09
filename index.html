@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I_Prep — Ace Your Next Tech Interview with AI</title>
+  <meta name="description" content="I_Prep is an AI-powered interview preparation platform for software engineers. Practice with AI-generated questions, get real-time feedback, and land your dream job." />
+  <meta name="keywords" content="interview prep, AI interview, software engineer interview, coding interview, tech interview preparation" />
+  <meta property="og:title" content="I_Prep — AI-Powered Interview Preparation" />
+  <meta property="og:description" content="AI-generated questions. Real-time answer analysis. Instant feedback." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" id="nav-logo">&lt;I_Prep /&gt;</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#practice" class="nav-link">Practice</a></li>
+        <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#login" class="btn-login" id="btn-login-nav">Login</a>
+        <a href="#signup" class="btn-cta-sm" id="btn-signup-nav">Get Started</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO SECTION ═══════════════ -->
+  <section class="hero" id="home">
+    <!-- Particle Canvas -->
+    <canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+    <!-- Gradient Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>AI-Powered Interview Platform</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Ace Your Next<br />
+        <span class="gradient-text">Tech Interview</span>
+      </h1>
+
+      <div class="typewriter-wrapper">
+        <span class="typewriter-label">as a</span>
+        <span class="typewriter-text" id="typewriterText"></span>
+        <span class="typewriter-cursor">|</span>
+      </div>
+
+      <p class="hero-subheading">
+        AI-generated questions. Real-time answer analysis.<br />
+        <strong>Instant feedback</strong> that accelerates your prep.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#practice" class="btn-primary" id="btn-start-practicing">
+          <span class="btn-icon">⚡</span>
+          Start Practicing
+          <span class="btn-shimmer"></span>
+        </a>
+        <a href="#how-it-works" class="btn-ghost" id="btn-how-it-works">
+          <span class="btn-play-icon">▶</span>
+          How It Works
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-item">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user1" alt="User avatar" class="trust-avatar" />
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user2" alt="User avatar" class="trust-avatar" />
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user3" alt="User avatar" class="trust-avatar" />
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user4" alt="User avatar" class="trust-avatar" />
+        </div>
+        <p class="trust-text"><strong>2,400+</strong> engineers prepped this month</p>
+      </div>
+    </div>
+
+    <!-- Dashboard Preview Card -->
+    <div class="dashboard-preview" id="dashboardPreview">
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="preview-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="preview-title">I_Prep — Live Session</span>
+          <div class="preview-status">
+            <span class="status-pulse"></span>
+            <span>AI Active</span>
+          </div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-question">
+            <span class="q-label">Q#12</span>
+            <p>Explain the difference between process and thread. How does Go's goroutine model differ from OS threads?</p>
+            <div class="q-tags">
+              <span class="tag">System Design</span>
+              <span class="tag">Concurrency</span>
+              <span class="tag tag-hard">Hard</span>
+            </div>
+          </div>
+          <div class="preview-answer">
+            <div class="answer-header">
+              <span class="answer-label">Your Answer</span>
+              <div class="ai-score">
+                <span class="score-icon"><i class="ph-fill ph-robot icon-gradient"></i></span>
+                <span class="score-val">AI Score: 87/100</span>
+              </div>
+            </div>
+            <div class="answer-text">A process has its own memory space and resources, while a thread shares memory within a process. Go's goroutines are lightweight...</div>
+            <div class="feedback-bar">
+              <div class="feedback-item feedback-good">
+                <span>✓</span> Strong conceptual foundation
+              </div>
+              <div class="feedback-item feedback-improve">
+                <span>△</span> Add scheduling detail
+              </div>
+            </div>
+          </div>
+          <div class="preview-metrics">
+            <div class="metric">
+              <span class="metric-value neon">87%</span>
+              <span class="metric-label">Accuracy</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">12</span>
+              <span class="metric-label">Questions</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value">32m</span>
+              <span class="metric-label">Time</span>
+            </div>
+            <div class="metric">
+              <span class="metric-value purple">Top 8%</span>
+              <span class="metric-label">Rank</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-mouse">
+        <div class="scroll-wheel"></div>
+      </div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════ STATS BAR ═══════════════ -->
+  <section class="stats-section" id="stats">
+    <div class="stats-container">
+      <div class="stat-card" data-target="10000" data-suffix="+" data-label="Questions Generated">
+        <div class="stat-icon">❓</div>
+        <div class="stat-number"><span class="counter" id="counter-1">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label">Questions Generated</div>
+        <div class="stat-border-glow"></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-card" data-target="50" data-suffix="+" data-label="Tech Roles Covered">
+        <div class="stat-icon"><i class="ph-fill ph-briefcase icon-gradient"></i></div>
+        <div class="stat-number"><span class="counter" id="counter-2">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label">Tech Roles Covered</div>
+        <div class="stat-border-glow"></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-card" data-target="100" data-suffix="%" data-label="Real-Time AI Feedback">
+        <div class="stat-icon"><i class="ph-fill ph-robot icon-gradient"></i></div>
+        <div class="stat-number"><span class="counter" id="counter-3">0</span><span class="stat-suffix">%</span></div>
+        <div class="stat-label">Real-Time AI Feedback</div>
+        <div class="stat-border-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-container">
+      <div class="section-badge">Process</div>
+      <h2 class="section-title">How <span class="gradient-text">I_Prep</span> Works</h2>
+      <p class="section-subtitle">Three steps from zero to interview-ready</p>
+
+      <div class="steps-grid">
+        <div class="step-card" id="step-1">
+          <div class="step-number">01</div>
+          <div class="step-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="15" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4 2"/>
+              <path d="M10 16h12M16 10v12" stroke="#00d4ff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="step-title">Choose Your Role</h3>
+          <p class="step-desc">Select from 50+ tech roles — SWE, Backend, ML Engineer, DevOps and more. Set your experience level and target companies.</p>
+        </div>
+
+        <div class="step-connector">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">→</div>
+        </div>
+
+        <div class="step-card" id="step-2">
+          <div class="step-number">02</div>
+          <div class="step-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="8" width="24" height="16" rx="3" stroke="#7b2ff7" stroke-width="1.5"/>
+              <path d="M10 14l3 3-3 3M16 20h6" stroke="#7b2ff7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="step-title">Practice with AI</h3>
+          <p class="step-desc">Answer AI-curated questions in a real interview environment. Speak or type — our engine understands both modalities.</p>
+        </div>
+
+        <div class="step-connector">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">→</div>
+        </div>
+
+        <div class="step-card" id="step-3">
+          <div class="step-number">03</div>
+          <div class="step-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M6 24l6-8 5 4 5-10 4 6" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="26" cy="8" r="3" fill="#7b2ff7"/>
+            </svg>
+          </div>
+          <h3 class="step-title">Get Instant Feedback</h3>
+          <p class="step-desc">Receive detailed AI analysis, scores, and improvement tips for every answer. Track your progress over time on the dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FEATURES SECTION ═══════════════ -->
+  <section class="features-section" id="practice">
+    <div class="section-container">
+      <div class="section-badge">Features</div>
+      <h2 class="section-title">Everything You Need to <span class="gradient-text">Win</span></h2>
+      <p class="section-subtitle">Purpose-built tools for the modern tech interview</p>
+
+      <div class="features-grid">
+        <div class="feature-card feature-large">
+          <div class="feature-icon-wrap">
+            <div class="feature-icon"><i class="ph-fill ph-brain icon-gradient"></i></div>
+          </div>
+          <h3 class="feature-title">AI Question Engine</h3>
+          <p class="feature-desc">Dynamically generates role-specific questions based on your weak areas, target company patterns, and current industry trends.</p>
+          <div class="feature-tag">GPT-4 Powered</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Real-Time Scoring</h3>
+          <p class="feature-desc">Instant answer analysis with scores, keyword coverage, and depth evaluation.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ph-fill ph-chart-bar icon-gradient"></i></div>
+          <h3 class="feature-title">Progress Analytics</h3>
+          <p class="feature-desc">Visual dashboards tracking your improvement across topics, roles, and difficulty levels.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ph-fill ph-trophy icon-gold"></i></div>
+          <h3 class="feature-title">Leaderboard</h3>
+          <p class="feature-desc">Compete with peers globally. Weekly challenges and streak-based rankings keep you motivated.</p>
+        </div>
+
+        <div class="feature-card feature-large feature-right">
+          <div class="feature-icon-wrap">
+            <div class="feature-icon"><i class="ph-fill ph-chats icon-gradient"></i></div>
+          </div>
+          <h3 class="feature-title">Mock Interview Mode</h3>
+          <p class="feature-desc">Simulate a full 45-minute interview with timed questions, follow-ups, and a comprehensive post-session report card.</p>
+          <div class="feature-tag">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CTA SECTION ═══════════════ -->
+  <section class="cta-section">
+    <div class="cta-glow"></div>
+    <div class="cta-container">
+      <h2 class="cta-title">Ready to <span class="gradient-text">Land Your Dream Job?</span></h2>
+      <p class="cta-subtitle">Join thousands of engineers who prep smarter, not harder.</p>
+      <div class="cta-buttons">
+        <a href="#signup" class="btn-primary btn-large" id="btn-cta-final">
+          <span>Start For Free</span>
+          <span class="btn-shimmer"></span>
+        </a>
+        <a href="#practice" class="btn-ghost btn-large" id="btn-cta-demo">View Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-logo">&lt;I_Prep /&gt;</span>
+        <p class="footer-tagline">Your AI interview co-pilot.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 I_Prep. Built with ❤️ for engineers.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+/* profile.css */
+.profile-layout { display:grid;grid-template-columns:280px 1fr;gap:1.5rem;max-width:1200px;margin:0 auto;padding:100px 2rem 4rem;position:relative;z-index:2;align-items:start; }
+
+/* Sidebar */
+.profile-sidebar { padding:2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;position:sticky;top:90px; }
+.avatar-wrap { position:relative;width:90px;height:90px;margin-bottom:1.25rem; }
+.avatar-ring { position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));animation:spin 6s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.avatar-circle { position:relative;width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:2.2rem;font-weight:800;color:#fff;z-index:1; }
+.profile-name { font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:4px; }
+.profile-role { font-size:0.82rem;color:var(--cyan);font-family:var(--font-mono);margin-bottom:6px; }
+.profile-since { font-size:0.75rem;color:var(--text-muted); }
+.profile-since span { color:var(--text-secondary); }
+.sidebar-divider { width:100%;height:1px;background:var(--border);margin:1.25rem 0; }
+.sidebar-stat { display:flex;align-items:center;gap:12px;width:100%;padding:8px 0; }
+.ss-icon { font-size:1.3rem; }
+.ss-val { font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--text-primary);line-height:1; }
+.ss-label { font-size:0.7rem;color:var(--text-muted);margin-top:2px; }
+.top-badge-wrap { width:100%;text-align:left; }
+.tb-label { font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px; }
+.top-badge { display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);padding:8px 14px;border-radius:10px; }
+.tb-icon { font-size:1.1rem; }
+.tb-name { font-size:0.82rem;font-weight:700;color:var(--cyan); }
+
+/* Main tabs */
+.profile-main { display:flex;flex-direction:column;gap:1.25rem; }
+.profile-tabs { display:flex;gap:4px;padding:6px;border-radius:var(--radius-lg) !important;background:rgba(255,255,255,0.03) !important; }
+.ptab { flex:1;background:none;border:none;color:var(--text-secondary);font-family:var(--font-sans);font-size:0.875rem;font-weight:600;padding:10px 16px;border-radius:var(--radius-md);cursor:pointer;transition:var(--transition); }
+.ptab.active { background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(123,47,247,0.12));color:var(--cyan);border:1px solid rgba(0,212,255,0.2); }
+.ptab:hover:not(.active) { color:var(--text-primary);background:rgba(255,255,255,0.04); }
+
+/* Tab panels */
+.tab-panel { display:flex;flex-direction:column;gap:1.25rem;animation:tabFadeIn 0.35s ease; }
+@keyframes tabFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* Stats */
+.mini-stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem; }
+.mini-stat { padding:1.25rem;text-align:center; }
+.ms-icon { font-size:1.5rem;margin-bottom:6px; }
+.ms-val { font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--cyan);margin-bottom:2px; }
+.ms-label { font-size:0.75rem;color:var(--text-secondary); }
+.mini-chart-card { padding:1.5rem; }
+.category-breakdown { padding:1.5rem; }
+.cat-bars { display:flex;flex-direction:column;gap:12px; }
+.cat-row { display:flex;align-items:center;gap:12px; }
+.cat-name { font-size:0.8rem;color:var(--text-secondary);width:140px;flex-shrink:0; }
+.sbar-track { flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden; }
+.sbar-fill { height:100%;border-radius:100px; }
+.sbar-cyan { background:linear-gradient(90deg,var(--cyan),#00a8cc); }
+.sbar-purple { background:linear-gradient(90deg,var(--purple),#5b21b6); }
+.cat-pct { font-family:var(--font-mono);font-size:0.75rem;width:36px;text-align:right; }
+.chart-title { font-family:var(--font-display);font-size:1rem;font-weight:700; }
+
+/* Settings */
+.settings-card { padding:2rem; }
+.settings-form { display:flex;flex-direction:column;gap:1.25rem; }
+.settings-row { display:grid;grid-template-columns:1fr 1fr;gap:1.25rem; }
+.toggle-row { display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md); }
+.toggle-label { font-size:0.875rem;font-weight:600;margin-bottom:2px; }
+.toggle-sub { font-size:0.75rem;color:var(--text-muted); }
+.toggle-switch { position:relative;display:inline-block;width:44px;height:24px; }
+.toggle-switch input { opacity:0;width:0;height:0; }
+.toggle-slider { position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;transition:var(--transition);border:1px solid var(--border); }
+.toggle-slider::before { content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;bottom:2px;left:2px;transition:var(--transition); }
+.toggle-switch input:checked + .toggle-slider { background:rgba(0,212,255,0.3);border-color:var(--cyan); }
+.toggle-switch input:checked + .toggle-slider::before { transform:translateX(20px);background:var(--cyan); }
+
+/* Saved questions */
+.saved-list { display:flex;flex-direction:column;gap:1rem; }
+.saved-item { background:var(--bg-glass);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;display:flex;align-items:center;gap:1rem;animation:tabFadeIn 0.35s ease; }
+.saved-item:hover { border-color:rgba(0,212,255,0.2); }
+.saved-q-text { flex:1;font-family:var(--font-mono);font-size:0.82rem;color:var(--text-secondary);line-height:1.5; }
+.saved-empty { text-align:center;padding:3rem;color:var(--text-secondary); }
+
+@media(max-width:900px) {
+  .profile-layout { grid-template-columns:1fr; }
+  .profile-sidebar { position:static; }
+  .mini-stats-grid { grid-template-columns:1fr 1fr; }
+  .settings-row { grid-template-columns:1fr; }
+}

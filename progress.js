@@ -1,0 +1,193 @@
+/* progress.js */
+const API = 'http://localhost:8000/api';
+const $ = id => document.getElementById(id);
+
+window.addEventListener('scroll', () => $('navbar').classList.toggle('scrolled', scrollY > 30));
+
+// IntersectionObserver for fade-up
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, {threshold:0.15});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// Counter animation
+function animCount(el, target, suffix='') {
+  let start = 0;
+  const dur = 1400, startTime = performance.now();
+  function step(now) {
+    const t = Math.min((now - startTime)/dur, 1);
+    const ease = 1 - Math.pow(1-t, 3);
+    start = Math.round(target * ease);
+    el.textContent = start + suffix;
+    if(t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Counter cards observe
+document.querySelectorAll('.sc-counter').forEach(el => {
+  const cardObs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting){
+      animCount(el, parseInt(el.dataset.target));
+      cardObs.unobserve(el);
+    }
+  }, {threshold:0.4});
+  cardObs.observe(el.closest('.summary-card'));
+});
+
+// ── Load data ──────────────────────────────────────────────────────────────
+async function loadProgress() {
+  let data;
+  try {
+    const res = await fetch(`${API}/progress`);
+    data = await res.json();
+  } catch {
+    data = {
+      session_scores: [
+        {label:'S1',score:70,date:'2026-04-30'},{label:'S2',score:88,date:'2026-05-02'},
+        {label:'S3',score:56,date:'2026-05-04'},{label:'S4',score:65,date:'2026-05-06'},
+        {label:'S5',score:91,date:'2026-05-07'},{label:'S6',score:74,date:'2026-05-08'},
+        {label:'S7',score:82,date:'2026-05-09'}
+      ],
+      radar: {DSA:78,'System Design':65,Behavioral:72,'Technical Concepts':88,Communication:70}
+    };
+  }
+  drawLineChart(data.session_scores);
+  drawRadar(data.radar);
+  loadHistory();
+}
+
+// ── Line Chart ─────────────────────────────────────────────────────────────
+function drawLineChart(sessions) {
+  if(!sessions||!sessions.length) return;
+  const W=640, H=200, padL=30, padR=20, padT=20, padB=30;
+  const iW=W-padL-padR, iH=H-padT-padB;
+  const n = sessions.length;
+  const maxScore = 100;
+  const pts = sessions.map((s,i)=>({
+    x: padL + (i/(n-1||1))*iW,
+    y: padT + (1 - s.score/maxScore)*iH,
+    score: s.score, label: s.label
+  }));
+
+  // Path
+  const dLine = 'M ' + pts.map(p=>`${p.x} ${p.y}`).join(' L ');
+  const dArea = dLine + ` L ${pts[pts.length-1].x} ${H-padB} L ${pts[0].x} ${H-padB} Z`;
+
+  const linePath = $('linePath');
+  const lineArea = $('lineArea');
+  linePath.setAttribute('d', dLine);
+  lineArea.setAttribute('d', dArea);
+
+  // Animate line draw
+  const lineLen = linePath.getTotalLength ? linePath.getTotalLength() : 1000;
+  linePath.setAttribute('stroke-dasharray', lineLen);
+  linePath.setAttribute('stroke-dashoffset', lineLen);
+
+  const lineObs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting) {
+      linePath.style.strokeDashoffset = '0';
+      lineObs.unobserve(entries[0].target);
+    }
+  }, {threshold:0.3});
+  lineObs.observe($('lineChart'));
+
+  // Dots
+  const dotsG = $('lineDots');
+  dotsG.innerHTML = pts.map(p=>`
+    <circle cx="${p.x}" cy="${p.y}" r="4" fill="#0a0f1e" stroke="#00d4ff" stroke-width="2"/>
+    <circle cx="${p.x}" cy="${p.y}" r="2" fill="#00d4ff"/>
+  `).join('');
+
+  // Labels
+  const labG = $('lineLabels');
+  labG.innerHTML = pts.map(p=>`
+    <text x="${p.x}" y="${H-padB+16}" text-anchor="middle"
+      font-size="9" fill="rgba(255,255,255,0.3)" font-family="JetBrains Mono">${p.label}</text>
+    <text x="${p.x}" y="${p.y-9}" text-anchor="middle"
+      font-size="9" fill="#00d4ff" font-family="JetBrains Mono">${p.score}</text>
+  `).join('');
+}
+
+// ── Radar Chart ────────────────────────────────────────────────────────────
+function drawRadar(data) {
+  const cx=150, cy=140, R=90;
+  const keys = Object.keys(data);
+  const n = keys.length;
+  const angles = keys.map((_,i) => (i/n)*2*Math.PI - Math.PI/2);
+
+  // Grid polygons
+  const gridG = $('radarGrid');
+  gridG.innerHTML = [0.25,0.5,0.75,1].map(frac=>{
+    const pts = angles.map(a=>`${cx+R*frac*Math.cos(a)},${cy+R*frac*Math.sin(a)}`).join(' ');
+    return `<polygon points="${pts}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  }).join('') + angles.map(a=>`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a)}" y2="${cy+R*Math.sin(a)}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`).join('');
+
+  // Labels
+  const labG = $('radarLabels');
+  labG.innerHTML = keys.map((k,i)=>{
+    const a = angles[i]; const dist = R+20;
+    const x = cx+dist*Math.cos(a), y = cy+dist*Math.sin(a);
+    const anchor = Math.cos(a) > 0.2 ? 'start' : Math.cos(a) < -0.2 ? 'end' : 'middle';
+    const shortK = k.replace('Technical Concepts','Tech').replace('System Design','Sys.Design');
+    return `<text x="${x}" y="${y+4}" text-anchor="${anchor}" font-size="9" fill="rgba(255,255,255,0.45)" font-family="JetBrains Mono">${shortK}\n${data[k]}%</text>`;
+  }).join('');
+
+  // Fill polygon
+  const fillPts = keys.map((k,i)=>{
+    const a=angles[i]; const r=R*(data[k]/100);
+    return `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;
+  }).join(' ');
+
+  const fillEl = $('radarFill');
+  fillEl.setAttribute('points', fillPts);
+
+  // Animate on scroll
+  const rObs = new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){ fillEl.style.opacity='1'; rObs.unobserve(entries[0].target); }
+  },{threshold:0.3});
+  rObs.observe($('radarChart'));
+
+  // Dots
+  $('radarDots').innerHTML = keys.map((k,i)=>{
+    const a=angles[i]; const r=R*(data[k]/100);
+    return `<circle cx="${cx+r*Math.cos(a)}" cy="${cy+r*Math.sin(a)}" r="4" fill="#7b2ff7" stroke="#fff" stroke-width="1.5"/>`;
+  }).join('');
+}
+
+// ── Session History ────────────────────────────────────────────────────────
+function loadHistory() {
+  const SESSIONS = [
+    {date:'2026-05-09',role:'Backend Engineer',category:'System Design',questions:10,avg_score:82,badge:'Good'},
+    {date:'2026-05-08',role:'Backend Engineer',category:'DSA',questions:8,avg_score:74,badge:'Good'},
+    {date:'2026-05-07',role:'Full Stack Developer',category:'Technical Concepts',questions:10,avg_score:91,badge:'Excellent'},
+    {date:'2026-05-06',role:'Backend Engineer',category:'Behavioral',questions:5,avg_score:65,badge:'Good'},
+    {date:'2026-05-04',role:'System Designer',category:'System Design',questions:10,avg_score:56,badge:'Needs Improvement'},
+    {date:'2026-05-02',role:'Frontend Developer',category:'DSA',questions:8,avg_score:88,badge:'Excellent'},
+    {date:'2026-04-30',role:'Backend Engineer',category:'Technical Concepts',questions:10,avg_score:70,badge:'Good'},
+  ];
+  const tbody = $('historyBody');
+  tbody.innerHTML = SESSIONS.map((s,i)=>{
+    const badgeClass = {Excellent:'badge-excellent',Good:'badge-good','Needs Improvement':'badge-needs',Weak:'badge-weak'}[s.badge]||'badge-good';
+    return `<tr style="transition-delay:${i*0.07}s">
+      <td style="color:var(--text-muted);font-family:var(--font-mono)">${i+1}</td>
+      <td style="font-family:var(--font-mono);font-size:0.78rem">${s.date}</td>
+      <td>${s.role}</td>
+      <td>${s.category}</td>
+      <td style="text-align:center;font-family:var(--font-mono)">${s.questions}</td>
+      <td style="text-align:center;font-family:var(--font-mono);color:var(--cyan)">${s.avg_score}%</td>
+      <td><span class="hist-badge ${badgeClass}">${s.badge}</span></td>
+    </tr>`;
+  }).join('');
+
+  // Stagger rows
+  const rows = tbody.querySelectorAll('tr');
+  const rowObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('row-visible'); rowObs.unobserve(e.target); }
+    });
+  },{threshold:0.1});
+  rows.forEach(r=>rowObs.observe(r));
+}
+
+loadProgress();

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Login — I_Prep</title>
+  <meta name="description" content="Login or sign up to I_Prep — AI-powered interview preparation platform."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/><link rel="stylesheet" href="login.css"/>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="login-layout">
+    <!-- LEFT: Branding Panel -->
+    <div class="brand-panel">
+      <canvas id="brandCanvas" class="brand-canvas"></canvas>
+      <div class="brand-content">
+        <a href="index.html" class="brand-logo">&lt;I_Prep /&gt;</a>
+        <h2 class="brand-tagline">Practice.<br/>Evaluate.<br/><span class="gradient-text">Improve.</span></h2>
+        <p class="brand-sub">Join 2,400+ engineers sharpening their skills with AI-powered interview prep.</p>
+
+        <!-- Fake terminal -->
+        <div class="terminal-card">
+          <div class="term-bar">
+            <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
+            <span class="term-title">i_prep ~ session</span>
+          </div>
+          <div class="term-body" id="termBody">
+            <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">iprep start --role backend --difficulty medium</span></div>
+            <div class="term-out" id="termOut"></div>
+          </div>
+        </div>
+
+        <div class="brand-stats">
+          <div class="bs-item"><div class="bs-val">10K+</div><div class="bs-label">Questions</div></div>
+          <div class="bs-sep"></div>
+          <div class="bs-item"><div class="bs-val">50+</div><div class="bs-label">Tech Roles</div></div>
+          <div class="bs-sep"></div>
+          <div class="bs-item"><div class="bs-val">AI</div><div class="bs-label">Feedback</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Auth Panel -->
+    <div class="auth-panel">
+      <div class="auth-card glass-card" id="authCard">
+        <!-- Tab Toggle -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" data-mode="login">Login</button>
+          <button class="auth-tab" id="tabSignup" data-mode="signup">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <form class="auth-form" id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input auth-input" id="loginEmail" type="email" placeholder="you@example.com" autocomplete="email"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="pw-wrap">
+              <input class="form-input auth-input" id="loginPw" type="password" placeholder="••••••••" autocomplete="current-password"/>
+              <button type="button" class="pw-toggle" id="toggleLoginPw"><i class="ph ph-eye"></i></button>
+            </div>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-primary btn-auth" id="btnLogin">
+            <span class="auth-spinner" id="loginSpinner" style="display:none">⟳</span>
+            <span id="loginLabel">Login</span>
+            <span class="btn-shimmer"></span>
+          </button>
+        </form>
+
+        <!-- Signup Form (hidden) -->
+        <form class="auth-form" id="signupForm" novalidate style="display:none">
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">Full Name</label><input class="form-input auth-input" id="signupName" type="text" placeholder="Tharun Tej"/></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input auth-input" id="signupEmail" type="email" placeholder="you@example.com"/></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="pw-wrap">
+              <input class="form-input auth-input" id="signupPw" type="password" placeholder="Min. 8 characters"/>
+              <button type="button" class="pw-toggle" id="toggleSignupPw"><i class="ph ph-eye"></i></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <input class="form-input auth-input" id="signupPw2" type="password" placeholder="Repeat password"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Role</label>
+            <select class="form-select" id="signupRole">
+              <option value="">Select a role…</option>
+              <option value="backend">Backend Engineer</option>
+              <option value="frontend">Frontend Developer</option>
+              <option value="fullstack">Full Stack Developer</option>
+              <option value="devops">DevOps Engineer</option>
+              <option value="system">System Designer</option>
+              <option value="dsa">DSA / Competitive Programming</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary btn-auth" id="btnSignup">
+            <span class="auth-spinner" id="signupSpinner" style="display:none">⟳</span>
+            <span id="signupLabel">Create Account</span>
+            <span class="btn-shimmer"></span>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider"><span>or continue with</span></div>
+
+        <!-- Google -->
+        <button class="btn-google" id="btnGoogle">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.805.54-1.836.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+            <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <p class="auth-switch" id="authSwitch">
+          Don't have an account? <button class="switch-link" id="switchToSignup">Sign up free</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

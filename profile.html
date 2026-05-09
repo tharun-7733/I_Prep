@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Profile — I_Prep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/><link rel="stylesheet" href="profile.css"/>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">&lt;I_Prep /&gt;</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="practice.html" class="nav-link">Practice</a></li>
+        <li><a href="progress.html" class="nav-link">Progress</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="profile.html" class="nav-link active">Profile</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-nav-ghost">Logout</a>
+        <a href="practice.html" class="btn-nav-cta">Practice Now</a>
+      </div>
+    </div>
+  </nav>
+  <div class="orb orb-purple" style="width:350px;height:350px;top:-60px;left:-60px;"></div>
+  <div class="orb orb-cyan" style="width:280px;height:280px;bottom:5%;right:-30px;animation-direction:alternate-reverse;"></div>
+
+  <div class="profile-layout">
+    <!-- LEFT SIDEBAR -->
+    <aside class="profile-sidebar glass-card fade-left" id="profileSidebar">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar-circle" id="avatarCircle">T</div>
+      </div>
+      <div class="profile-name" id="profileName">Tharun Tej</div>
+      <div class="profile-role" id="profileRole">Aspiring Backend Engineer</div>
+      <div class="profile-since">Member since <span>May 2026</span></div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-stat">
+        <span class="ss-icon"><i class="ph-fill ph-fire icon-fire"></i></span>
+        <div><div class="ss-val">7 days</div><div class="ss-label">Current Streak</div></div>
+      </div>
+      <div class="sidebar-stat">
+        <span class="ss-icon"><i class="ph-fill ph-chart-bar icon-gradient"></i></span>
+        <div><div class="ss-val">75%</div><div class="ss-label">Avg Score</div></div>
+      </div>
+      <div class="sidebar-stat">
+        <span class="ss-icon"><i class="ph-fill ph-note-pencil icon-gradient"></i></span>
+        <div><div class="ss-val">61</div><div class="ss-label">Questions Done</div></div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="top-badge-wrap">
+        <div class="tb-label">Top Badge</div>
+        <div class="top-badge">
+          <span class="tb-icon">⚡</span>
+          <span class="tb-name">Speed Runner</span>
+        </div>
+      </div>
+
+      <a href="practice.html" class="btn-primary" style="margin-top:1.5rem;text-align:center;justify-content:center">
+        ⚡ Start Session
+        <span class="btn-shimmer"></span>
+      </a>
+    </aside>
+
+    <!-- RIGHT MAIN -->
+    <main class="profile-main fade-right" id="profileMain">
+      <!-- Tab Bar -->
+      <div class="profile-tabs glass-card">
+        <button class="ptab active" data-tab="stats">My Stats</button>
+        <button class="ptab" data-tab="settings">Settings</button>
+        <button class="ptab" data-tab="saved">Saved Questions</button>
+      </div>
+
+      <!-- Stats Tab -->
+      <div class="tab-panel" id="tab-stats">
+        <div class="mini-stats-grid">
+          <div class="mini-stat glass-card"><div class="ms-icon"><i class="ph-fill ph-note-pencil icon-gradient"></i></div><div class="ms-val">61</div><div class="ms-label">Questions</div></div>
+          <div class="mini-stat glass-card"><div class="ms-icon"><i class="ph-fill ph-chart-bar icon-gradient"></i></div><div class="ms-val">75%</div><div class="ms-label">Avg Score</div></div>
+          <div class="mini-stat glass-card"><div class="ms-icon"><i class="ph-fill ph-medal icon-gold"></i></div><div class="ms-val">7</div><div class="ms-label">Sessions</div></div>
+          <div class="mini-stat glass-card"><div class="ms-icon"><i class="ph-fill ph-fire icon-fire"></i></div><div class="ms-val">7</div><div class="ms-label">Day Streak</div></div>
+        </div>
+        <div class="mini-chart-card glass-card">
+          <div class="chart-header" style="margin-bottom:1rem">
+            <h3 class="chart-title">Recent Score Trend</h3>
+          </div>
+          <svg id="miniLine" viewBox="0 0 500 120" style="width:100%;display:block;border-radius:8px;background:rgba(0,0,0,0.15)">
+            <defs>
+              <linearGradient id="miniGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="miniArea" d="" fill="url(#miniGrad)"/>
+            <path id="miniPath" d="" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+            <g id="miniDots"></g>
+          </svg>
+        </div>
+        <div class="category-breakdown glass-card">
+          <h3 class="chart-title" style="margin-bottom:1.25rem">Category Breakdown</h3>
+          <div class="cat-bars">
+            <div class="cat-row"><span class="cat-name">Technical Concepts</span><div class="sbar-track"><div class="sbar-fill sbar-cyan" style="width:88%"></div></div><span class="cat-pct" style="color:var(--cyan)">88%</span></div>
+            <div class="cat-row"><span class="cat-name">DSA</span><div class="sbar-track"><div class="sbar-fill sbar-purple" style="width:78%"></div></div><span class="cat-pct" style="color:var(--purple)">78%</span></div>
+            <div class="cat-row"><span class="cat-name">Behavioral</span><div class="sbar-track"><div class="sbar-fill sbar-cyan" style="width:72%"></div></div><span class="cat-pct" style="color:var(--cyan)">72%</span></div>
+            <div class="cat-row"><span class="cat-name">System Design</span><div class="sbar-track"><div class="sbar-fill sbar-purple" style="width:65%"></div></div><span class="cat-pct" style="color:var(--purple)">65%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-panel" id="tab-settings" style="display:none">
+        <div class="settings-card glass-card">
+          <h3 class="chart-title" style="margin-bottom:1.5rem">Account Settings</h3>
+          <div class="settings-form">
+            <div class="settings-row">
+              <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="setName" value="Tharun Tej"/></div>
+              <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="setEmail" value="tharun@example.com" type="email"/></div>
+            </div>
+            <div class="settings-row">
+              <div class="form-group"><label class="form-label">Preferred Role</label>
+                <select class="form-select" id="setRole">
+                  <option value="backend" selected>Backend Engineer</option>
+                  <option value="frontend">Frontend Developer</option>
+                  <option value="fullstack">Full Stack Developer</option>
+                  <option value="devops">DevOps Engineer</option>
+                  <option value="system">System Designer</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Default Difficulty</label>
+                <select class="form-select" id="setDiff">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Email Notifications</div><div class="toggle-sub">Daily practice reminders</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifToggle" checked/><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Streak Alerts</div><div class="toggle-sub">Alert when streak is at risk</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="streakToggle" checked/><span class="toggle-slider"></span></label>
+            </div>
+            <button class="btn-primary" id="btnSaveSettings" style="margin-top:0.5rem">
+              Save Settings <span class="btn-shimmer"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saved Questions Tab -->
+      <div class="tab-panel" id="tab-saved" style="display:none">
+        <div class="saved-list" id="savedList">
+          <div class="saved-empty" id="savedEmpty" style="display:none">
+            <p>No bookmarked questions yet.</p>
+            <p style="color:var(--text-muted);font-size:0.85rem">Bookmark questions during practice by clicking ☆</p>
+            <a href="practice.html" class="btn-primary" style="margin-top:1rem;display:inline-flex">Go Practice</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer" style="margin-left:0"><p>© 2026 I_Prep · <a href="index.html">Home</a></p></footer>
+  <script src="profile.js"></script>
+</body>
+</html>

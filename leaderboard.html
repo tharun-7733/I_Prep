@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Leaderboard — I_Prep</title>
+  <meta name="description" content="See top interview prep performers on I_Prep's global leaderboard."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/><link rel="stylesheet" href="leaderboard.css"/>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">&lt;I_Prep /&gt;</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="practice.html" class="nav-link">Practice</a></li>
+        <li><a href="progress.html" class="nav-link">Progress</a></li>
+        <li><a href="leaderboard.html" class="nav-link active">Leaderboard</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-nav-ghost">Login</a>
+        <a href="practice.html" class="btn-nav-cta">Practice Now</a>
+      </div>
+    </div>
+  </nav>
+  <canvas id="lbCanvas" class="lb-canvas"></canvas>
+
+  <!-- Hero Banner -->
+  <section class="lb-hero">
+    <div class="lb-hero-content">
+      <div class="section-badge"><i class="ph-fill ph-trophy icon-gold"></i> Rankings</div>
+      <h1 class="page-title">Top Performers <span class="gradient-text">This Week</span></h1>
+      <p class="page-subtitle">Compete, improve, and rise to the top across 6 tech roles.</p>
+      <!-- Tab Switcher -->
+      <div class="tab-switcher" id="tabSwitcher">
+        <button class="tab-btn active" data-period="weekly">Weekly</button>
+        <button class="tab-btn" data-period="monthly">Monthly</button>
+        <button class="tab-btn" data-period="alltime">All Time</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-wrap">
+    <!-- Podium Top 3 -->
+    <div class="podium-section">
+      <div class="podium-wrap" id="podiumWrap">
+        <!-- 2nd place -->
+        <div class="podium-item podium-2" id="podium2" style="--delay:0.2s">
+          <div class="podium-card glass-card">
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#c0c0c0,#a0a0a0)">P</div>
+            <div class="podium-user" id="p2user">priya_backend</div>
+            <div class="podium-score" id="p2score">91</div>
+            <div class="podium-sessions" id="p2sessions">38 sessions</div>
+            <span class="podium-badge badge-excellent">Excellent</span>
+          </div>
+          <div class="podium-base podium-base-2">
+            <span class="podium-rank silver">2</span>
+          </div>
+        </div>
+        <!-- 1st place -->
+        <div class="podium-item podium-1" id="podium1" style="--delay:0s">
+          <div class="podium-crown"><i class="ph-fill ph-crown icon-gold"></i></div>
+          <div class="podium-card glass-card podium-card-1">
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#FFD700,#FFA500)">A</div>
+            <div class="podium-user" id="p1user">aditya_sys</div>
+            <div class="podium-score" id="p1score">94</div>
+            <div class="podium-sessions" id="p1sessions">42 sessions</div>
+            <span class="podium-badge badge-excellent">Excellent</span>
+          </div>
+          <div class="podium-base podium-base-1">
+            <span class="podium-rank gold">1</span>
+          </div>
+        </div>
+        <!-- 3rd place -->
+        <div class="podium-item podium-3" id="podium3" style="--delay:0.35s">
+          <div class="podium-card glass-card">
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#CD7F32,#b87333)">K</div>
+            <div class="podium-user" id="p3user">karan_fs</div>
+            <div class="podium-score" id="p3score">89</div>
+            <div class="podium-sessions" id="p3sessions">35 sessions</div>
+            <span class="podium-badge badge-excellent">Excellent</span>
+          </div>
+          <div class="podium-base podium-base-3">
+            <span class="podium-rank bronze">3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="lb-filters glass-card">
+      <div class="lb-filters-inner">
+        <div class="form-group" style="flex:1;min-width:180px">
+          <label class="form-label">Filter by Role</label>
+          <select class="form-select" id="roleFilter">
+            <option value="All">All Roles</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Backend Engineer">Backend Engineer</option>
+            <option value="Full Stack Developer">Full Stack</option>
+            <option value="DevOps Engineer">DevOps</option>
+            <option value="System Designer">System Designer</option>
+            <option value="DSA / Competitive Programming">DSA / CP</option>
+          </select>
+        </div>
+        <div class="lb-total-info">
+          <span class="lb-count" id="lbCount">10 performers</span>
+          <span style="color:var(--text-muted);font-size:0.78rem">Showing top results</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full Table -->
+    <div class="lb-table-wrap glass-card">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>Rank</th><th>User</th><th>Role Focus</th>
+            <th>Sessions</th><th>Avg Score</th><th>Streak</th><th>Top Badge</th>
+          </tr>
+        </thead>
+        <tbody id="lbTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Badge Gallery -->
+    <div class="badge-gallery-section">
+      <h3 class="chart-title" style="margin-bottom:1.25rem">Earnable Badges</h3>
+      <div class="badge-strip" id="badgeStrip">
+        <div class="badge-item badge-unlocked"><div class="bi-icon"><i class="ph-fill ph-trophy icon-gold"></i></div><div class="bi-name">Excellent Streak</div><div class="bi-desc">Score 85+ for 5 sessions</div></div>
+        <div class="badge-item badge-unlocked"><div class="bi-icon">⚡</div><div class="bi-name">Speed Runner</div><div class="bi-desc">Complete 10 questions under 30min</div></div>
+        <div class="badge-item badge-locked"><div class="bi-icon"><i class="ph-fill ph-lock-key" style="color: #888"></i></div><div class="bi-name">DSA Master</div><div class="bi-desc">Score 90+ on 20 DSA questions</div></div>
+        <div class="badge-item badge-locked"><div class="bi-icon"><i class="ph-fill ph-lock-key" style="color: #888"></i></div><div class="bi-name">System Thinker</div><div class="bi-desc">Complete 15 System Design sessions</div></div>
+        <div class="badge-item badge-locked"><div class="bi-icon"><i class="ph-fill ph-lock-key" style="color: #888"></i></div><div class="bi-name">Consistency King</div><div class="bi-desc">Practice 30 days in a row</div></div>
+        <div class="badge-item badge-locked"><div class="bi-icon"><i class="ph-fill ph-lock-key" style="color: #888"></i></div><div class="bi-name">Top 1%</div><div class="bi-desc">Reach rank 1 on weekly board</div></div>
+        <div class="badge-item badge-locked"><div class="bi-icon"><i class="ph-fill ph-lock-key" style="color: #888"></i></div><div class="bi-name">All-Rounder</div><div class="bi-desc">Score 70+ in all 4 categories</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><p>© 2026 I_Prep · <a href="practice.html">Start Practicing</a></p></footer>
+  <script src="leaderboard.js"></script>
+</body>
+</html>
