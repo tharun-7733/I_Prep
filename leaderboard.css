@@ -4,7 +4,7 @@
 .lb-hero-content { max-width:700px; }
 .tab-switcher { display:inline-flex;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:4px;gap:4px;margin-top:1.5rem; }
 .tab-btn { background:none;border:none;color:var(--text-secondary);font-family:var(--font-sans);font-size:0.875rem;font-weight:600;padding:8px 22px;border-radius:9px;cursor:pointer;transition:var(--transition); }
-.tab-btn.active { background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(123,47,247,0.15));color:var(--cyan);border:1px solid rgba(0,212,255,0.2); }
+.tab-btn.active { background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));color:var(--cyan);border:1px solid rgba(99,102,241,0.2); }
 .tab-btn:hover:not(.active) { color:var(--text-primary);background:rgba(255,255,255,0.04); }
 .page-wrap { max-width:1100px;margin:0 auto;padding:0 2rem 4rem;position:relative;z-index:2; }
 
@@ -46,25 +46,25 @@
 .lb-table td { padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text-secondary);vertical-align:middle; }
 .lb-table tr.lb-row { opacity:0;transform:translateX(-20px);transition:opacity 0.4s ease, transform 0.4s ease; }
 .lb-table tr.lb-row.row-in { opacity:1;transform:translateX(0); }
-.lb-table tr.current-user td { background:rgba(0,212,255,0.04); }
-.lb-table tr.current-user { box-shadow:inset 0 0 0 1px rgba(0,212,255,0.2); }
+.lb-table tr.current-user td { background:rgba(99,102,241,0.04); }
+.lb-table tr.current-user { box-shadow:inset 0 0 0 1px rgba(99,102,241,0.2); }
 .rank-badge { display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-family:var(--font-mono);font-size:0.78rem;font-weight:700;background:rgba(255,255,255,0.06);color:var(--text-muted); }
-.rank-top { background:rgba(0,212,255,0.1);color:var(--cyan); }
+.rank-top { background:rgba(99,102,241,0.1);color:var(--cyan); }
 .user-cell { display:flex;align-items:center;gap:10px; }
 .user-av { width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff; }
-.you-tag { font-size:0.6rem;background:rgba(0,212,255,0.15);color:var(--cyan);padding:2px 6px;border-radius:4px;font-family:var(--font-mono); }
+.you-tag { font-size:0.6rem;background:rgba(99,102,241,0.15);color:var(--cyan);padding:2px 6px;border-radius:4px;font-family:var(--font-mono); }
 .streak-cell { display:flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:0.78rem; }
 
 /* Badge gallery */
 .badge-gallery-section { padding:2rem 0; }
 .badge-strip { display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scrollbar-width:thin; }
 .badge-item { flex-shrink:0;width:160px;background:var(--bg-glass);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;text-align:center;transition:var(--transition); }
-.badge-item:hover { transform:translateY(-4px);border-color:rgba(0,212,255,0.2); }
-.badge-unlocked { border-color:rgba(0,212,255,0.15); }
+.badge-item:hover { transform:translateY(-4px);border-color:rgba(99,102,241,0.2); }
+.badge-unlocked { border-color:rgba(99,102,241,0.15); }
 .badge-locked { opacity:0.4; }
 .bi-icon { font-size:2rem;margin-bottom:8px; }
 .bi-name { font-family:var(--font-display);font-size:0.82rem;font-weight:700;margin-bottom:4px; }
 .bi-desc { font-size:0.68rem;color:var(--text-muted);line-height:1.4; }
-.badge-excellent { background:rgba(0,255,136,0.1);color:#00ff88;border:1px solid rgba(0,255,136,0.2);padding:3px 9px;border-radius:5px;font-size:0.65rem;font-family:var(--font-mono);font-weight:700; }
+.badge-excellent { background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2);padding:3px 9px;border-radius:5px;font-size:0.65rem;font-family:var(--font-mono);font-weight:700; }
 .chart-title { font-family:var(--font-display);font-size:1rem;font-weight:700; }
 @media(max-width:600px){.podium-wrap{gap:0.75rem;}.podium-card{min-width:110px;padding:1rem;}}
