@@ -25,7 +25,7 @@ const termLines = [
   {text:'> Evaluating answer...', hl:false},
   {text:'✓ Score: 82/100  |  Badge: Good', hl:true},
   {text:'> Feedback: Strong base, add examples', hl:false},
-  {text:'> Next question queued ⚡', hl:false},
+  {text:'> Next question queued ✨', hl:false},
 ];
 const termOut = $('termOut');
 let li = 0;

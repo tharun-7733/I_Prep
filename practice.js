@@ -42,25 +42,14 @@ btnGenerate.addEventListener('click', async () => {
     loadQuestion(0);
     updateArenaStatus();
   } catch(e) {
-    // Fallback: use embedded sample
-    questions = getSampleQuestions(role, category, difficulty);
-    currentIdx = 0; sessionActive = true;
-    loadQuestion(0); updateArenaStatus();
+    showToast('⚠️ Could not reach the server. Make sure the backend is running at localhost:8000.');
   } finally {
     $('generateLabel').textContent = 'Generate Questions';
     btnGenerate.disabled = false;
   }
 });
 
-function getSampleQuestions(role, category, difficulty) {
-  return [
-    {text: "Explain the difference between process and thread. How does Go's goroutine model differ?", category: "Technical Concepts", difficulty: "Medium", tags: ["Concurrency","OS"]},
-    {text: "What are database indexes? Explain B-Tree vs Hash and when to use each.", category: "Technical Concepts", difficulty: "Medium", tags: ["Database","Indexes"]},
-    {text: "Implement an LRU Cache with O(1) get and put. What data structures?", category: "DSA", difficulty: "Medium", tags: ["Cache","HashMap"]},
-    {text: "Design a URL shortener like bit.ly. Cover hashing, storage, and scaling.", category: "System Design", difficulty: "Medium", tags: ["System Design"]},
-    {text: "Explain the CAP theorem and how it affects distributed database design.", category: "Technical Concepts", difficulty: "Hard", tags: ["Distributed","CAP"]},
-  ];
-}
+
 
 // ── Load Question ──────────────────────────────────────────────────────────
 function loadQuestion(idx) {
@@ -200,8 +189,7 @@ btnEvaluate.addEventListener('click', async () => {
     showFeedback(data);
     saveToHistory(question, data, timerSeconds);
   } catch(e) {
-    // Offline fallback scoring
-    showFeedback(localEvaluate(answer, question));
+    showToast('⚠️ Evaluation failed. Make sure the backend is running at localhost:8000.');
   } finally {
     $('evalSpinner').style.display = 'none';
     $('evalLabel').textContent = 'Evaluate My Answer';
@@ -209,21 +197,7 @@ btnEvaluate.addEventListener('click', async () => {
   }
 });
 
-function localEvaluate(answer, question) {
-  const words = answer.trim().split(/\s+/).length;
-  const score = Math.min(100, Math.max(20, words * 1.2 + 30));
-  return {
-    overall_score: Math.round(score), relevance: Math.round(score * 0.9),
-    depth: Math.round(score * 0.7), clarity: Math.round(score * 0.85),
-    badge: score >= 85 ? 'Excellent' : score >= 65 ? 'Good' : score >= 40 ? 'Needs Improvement' : 'Weak',
-    badge_config: {color:'#00d4ff', glow:'rgba(0,212,255,0.35)', emoji:'<i class="ph-fill ph-info" style="color: #00d4ff"></i>'},
-    feedback: {
-      positive: ['Shows engagement with the question'],
-      missing:  ['Add more technical depth'],
-      ideal:    ['Include concrete examples', 'State complexity where relevant'],
-    }
-  };
-}
+
 
 // ── Show Feedback (Premium V2) ────────────────────────────────────────────
 function showFeedback(data) {

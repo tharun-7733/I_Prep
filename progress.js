@@ -107,29 +107,16 @@ async function loadProgress() {
     SESSIONS.sort((a,b) => new Date(b.date) - new Date(a.date));
 
   } else {
-    // Fallback to mock data if no history
+    // No history yet — show clean empty state
     data = {
-      total_questions: 61,
-      avg_score: 75,
-      best_category: 'Technical Concepts',
-      sessions_completed: 7,
-      session_scores: [
-        {label:'S1',score:70,date:'2026-04-30'},{label:'S2',score:88,date:'2026-05-02'},
-        {label:'S3',score:56,date:'2026-05-04'},{label:'S4',score:65,date:'2026-05-06'},
-        {label:'S5',score:91,date:'2026-05-07'},{label:'S6',score:74,date:'2026-05-08'},
-        {label:'S7',score:82,date:'2026-05-09'}
-      ],
-      radar: {DSA:78,'System Design':65,Behavioral:72,'Technical Concepts':88,Communication:70}
+      total_questions:    0,
+      avg_score:          0,
+      best_category:      'N/A',
+      sessions_completed: 0,
+      session_scores:     [],
+      radar:              {}
     };
-    SESSIONS = [
-      {date:'2026-05-09',role:'Backend Engineer',category:'System Design',questions:10,avg_score:82,badge:'Good'},
-      {date:'2026-05-08',role:'Backend Engineer',category:'DSA',questions:8,avg_score:74,badge:'Good'},
-      {date:'2026-05-07',role:'Full Stack Developer',category:'Technical Concepts',questions:10,avg_score:91,badge:'Excellent'},
-      {date:'2026-05-06',role:'Backend Engineer',category:'Behavioral',questions:5,avg_score:65,badge:'Good'},
-      {date:'2026-05-04',role:'System Designer',category:'System Design',questions:10,avg_score:56,badge:'Needs Improvement'},
-      {date:'2026-05-02',role:'Frontend Developer',category:'DSA',questions:8,avg_score:88,badge:'Excellent'},
-      {date:'2026-04-30',role:'Backend Engineer',category:'Technical Concepts',questions:10,avg_score:70,badge:'Good'},
-    ];
+    SESSIONS = [];
   }
 
   // Update DOM targets dynamically

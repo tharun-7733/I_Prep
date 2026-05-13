@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   SCRIPT.JS — I_Prep Hero Landing Page
+   SCRIPT.JS — iPrep Hero Landing Page
 ═══════════════════════════════════════════ */
 
 // ── Navbar scroll ──────────────────────────
