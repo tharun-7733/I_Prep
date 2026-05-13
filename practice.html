@@ -15,6 +15,7 @@
 </head>
 <body>
 
+  <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">&lt;iPrep /&gt;</a>
@@ -32,313 +33,313 @@
     </div>
   </nav>
 
-  <div class="orb orb-purple" style="width:450px;height:450px;top:-100px;left:-80px;animation-duration:11s;"></div>
-  <div class="orb orb-cyan"   style="width:350px;height:350px;bottom:-60px;right:-40px;animation-duration:15s;animation-direction:alternate-reverse;"></div>
+  <!-- Background orbs -->
+  <div class="orb orb-purple" style="width:500px;height:500px;top:-150px;left:-120px;animation-duration:12s;"></div>
+  <div class="orb orb-cyan" style="width:400px;height:400px;bottom:-80px;right:-60px;animation-duration:16s;animation-direction:alternate-reverse;"></div>
 
-  <!-- ── ARENA HEADER ── -->
-  <header class="arena-header">
-    <div class="arena-header-inner">
-      <div class="arena-meta">
-        <div class="section-badge">Practice Arena</div>
-        <h1 class="page-title">Interview <span class="gradient-text">Simulator</span></h1>
-        <p class="page-subtitle">Select your role, generate questions, and get AI-evaluated instantly.</p>
-      </div>
-      <div class="arena-status" id="arenaStatus">
-        <div class="status-dot status-ready"></div>
-        <span id="statusText">Ready</span>
-        <span class="status-sep">·</span>
-        <span id="questionProgress">Question 0 of 10</span>
-      </div>
-    </div>
-  </header>
+  <!-- ── PAGE WRAPPER ── -->
+  <div class="practice-wrapper">
 
-  <!-- ── CONTROLS BAR ── -->
-  <div class="controls-bar glass-card" id="controlsBar">
-    <div class="controls-inner">
-      <div class="form-group">
-        <label class="form-label">Role</label>
-        <select class="form-select" id="roleSelect">
-          <option value="All">All Roles</option>
-          <option value="Frontend Developer">Frontend Developer</option>
-          <option value="Backend Engineer" selected>Backend Engineer</option>
-          <option value="Full Stack Developer">Full Stack Developer</option>
-          <option value="DevOps Engineer">DevOps Engineer</option>
-          <option value="System Designer">System Designer</option>
-          <option value="DSA / Competitive Programming">DSA / CP</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="categorySelect">
-          <option value="All">All Categories</option>
-          <option value="DSA">DSA</option>
-          <option value="System Design">System Design</option>
-          <option value="Technical Concepts" selected>Technical Concepts</option>
-          <option value="Behavioral">Behavioral</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Difficulty</label>
-        <select class="form-select" id="difficultySelect">
-          <option value="All">All</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium" selected>Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
-      </div>
-      <button class="btn-generate" id="btnGenerate">
-        <span class="generate-icon">✨</span>
-        <span id="generateLabel">Generate Questions</span>
-        <span class="btn-ripple" id="btnRipple"></span>
-      </button>
-    </div>
-  </div>
-
-  <!-- ── SPLIT ARENA ── -->
-  <main class="arena-main" id="arenaMain">
-
-    <!-- LEFT: Question Panel -->
-    <div class="question-panel glass-card" id="questionPanel">
-      <!-- Empty state -->
-      <div class="empty-state" id="emptyState">
-        <div class="empty-icon">✨</div>
-        <p class="empty-title">No questions loaded</p>
-        <p class="empty-sub">Configure your session above and hit <strong>Generate Questions</strong></p>
-      </div>
-
-      <!-- Question loaded state (hidden initially) -->
-      <div class="question-loaded" id="questionLoaded" style="display:none;">
-        <div class="q-panel-header">
-          <div class="q-counter">
-            <span class="q-current" id="qCurrent">1</span>
-            <span class="q-sep">/</span>
-            <span class="q-total" id="qTotal">10</span>
-          </div>
-          <div class="q-meta-badges" id="qMetaBadges">
-            <span class="q-cat-badge" id="qCatBadge">Technical Concepts</span>
-            <span class="q-diff-badge" id="qDiffBadge">Medium</span>
-          </div>
-          <button class="btn-bookmark" id="btnBookmark" title="Bookmark question">
-            <span id="bookmarkIcon">☆</span>
-          </button>
+    <!-- ── TOP HEADER ── -->
+    <header class="arena-header">
+      <div class="arena-header-inner">
+        <div class="arena-meta">
+          <div class="section-badge">Practice Arena</div>
+          <h1 class="page-title">Interview <span class="gradient-text">Simulator</span></h1>
+          <p class="page-subtitle">Pick your role, choose difficulty — get AI-scored in seconds.</p>
         </div>
-
-        <div class="question-card" id="questionCard">
-          <div class="question-card-inner">
-            <div class="q-label-mono">QUESTION</div>
-            <div class="question-text" id="questionText"></div>
-            <div class="q-tags-row" id="qTagsRow"></div>
-          </div>
+        <div class="arena-status-pill" id="arenaStatus">
+          <div class="status-dot status-ready"></div>
+          <span id="statusText">Ready</span>
+          <span class="status-sep">·</span>
+          <span id="questionProgress">Question 0 of 0</span>
         </div>
+      </div>
+    </header>
 
-        <div class="q-nav-buttons">
-          <button class="btn-ghost btn-skip" id="btnSkip">
-            <span>↩</span> Skip
-          </button>
-          <div class="q-progress-dots" id="qProgressDots"></div>
-          <button class="btn-ghost btn-next" id="btnNext" disabled>
-            Next <span>→</span>
-          </button>
+    <!-- ── CONTROLS BAR ── -->
+    <div class="controls-bar glass-card">
+      <div class="controls-inner">
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ph-fill ph-briefcase"></i> Role
+          </label>
+          <select class="form-select" id="roleSelect">
+            <option value="All">All Roles</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Backend Engineer" selected>Backend Engineer</option>
+            <option value="Full Stack Developer">Full Stack Developer</option>
+            <option value="DevOps Engineer">DevOps Engineer</option>
+            <option value="System Designer">System Designer</option>
+            <option value="DSA / Competitive Programming">DSA / CP</option>
+          </select>
         </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ph-fill ph-tag"></i> Category
+          </label>
+          <select class="form-select" id="categorySelect">
+            <option value="All">All Categories</option>
+            <option value="DSA">DSA</option>
+            <option value="System Design">System Design</option>
+            <option value="Technical Concepts" selected>Technical Concepts</option>
+            <option value="Behavioral">Behavioral</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="ph-fill ph-gauge"></i> Difficulty
+          </label>
+          <select class="form-select" id="difficultySelect">
+            <option value="All">All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <button class="btn-generate" id="btnGenerate">
+          <span id="generateLabel">Generate Questions</span>
+          <span class="btn-ripple" id="btnRipple"></span>
+        </button>
       </div>
     </div>
 
-    <!-- RIGHT: Answer Panel -->
-    <div class="answer-panel" id="answerPanel">
+    <!-- ── ARENA SPLIT ── -->
+    <main class="arena-main" id="arenaMain">
 
-      <!-- Answer Zone (shown while answering) -->
-      <div class="answer-zone glass-card" id="answerZone">
-        <div class="editor-topbar">
-          <div class="editor-dots">
-            <span class="ed-dot red"></span><span class="ed-dot yellow"></span><span class="ed-dot green"></span>
+      <!-- LEFT: Question Panel -->
+      <div class="question-panel glass-card" id="questionPanel">
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon-wrap">
+            <i class="ph-fill ph-brain"></i>
           </div>
-          <span class="editor-filename">answer.md</span>
-          <div class="editor-timer" id="editorTimer">
-            <span class="timer-icon">⏱</span>
-            <span id="timerDisplay">00:00</span>
-          </div>
+          <p class="empty-title">Ready to Begin</p>
+          <p class="empty-sub">Configure your session above and hit <strong>Generate Questions</strong></p>
         </div>
 
-        <div class="editor-body">
-          <div class="line-numbers" id="lineNumbers"><span>1</span></div>
-          <textarea
-            class="answer-textarea"
-            id="answerTextarea"
-            placeholder="Type your answer here...&#10;&#10;Be thorough — explain concepts, include examples, and consider edge cases."
-            spellcheck="false"
-          ></textarea>
-        </div>
-
-        <div class="editor-footer">
-          <div class="editor-stats">
-            <span id="wordCount">0 words</span>
-            <span class="stat-sep">·</span>
-            <span id="charCount">0 chars</span>
-            <span class="stat-sep">·</span>
-            <span class="stat-hint">Shift+Enter for new line</span>
+        <!-- Question loaded state -->
+        <div class="question-loaded" id="questionLoaded" style="display:none;">
+          <div class="q-panel-header">
+            <div class="q-counter">
+              <span class="q-current" id="qCurrent">1</span>
+              <span class="q-sep">/</span>
+              <span class="q-total" id="qTotal">10</span>
+            </div>
+            <div class="q-meta-badges" id="qMetaBadges">
+              <span class="q-cat-badge" id="qCatBadge">Technical Concepts</span>
+              <span class="q-diff-badge" id="qDiffBadge">Medium</span>
+            </div>
+            <button class="btn-bookmark" id="btnBookmark" title="Bookmark question">
+              <span id="bookmarkIcon">☆</span>
+            </button>
           </div>
-          <div class="editor-actions">
-            <button class="btn-clear" id="btnClear" title="Clear answer">✕ Clear</button>
-            <button class="btn-evaluate btn-primary" id="btnEvaluate" disabled>
-              <span class="eval-spinner" id="evalSpinner" style="display:none;">⟳</span>
-              <span id="evalLabel">Evaluate My Answer</span>
-              <span class="btn-shimmer"></span>
+
+          <div class="question-card" id="questionCard">
+            <div class="question-card-inner">
+              <div class="q-label-mono">QUESTION</div>
+              <div class="question-text" id="questionText"></div>
+              <div class="q-tags-row" id="qTagsRow"></div>
+            </div>
+          </div>
+
+          <div class="q-nav-buttons">
+            <button class="btn-ghost btn-skip" id="btnSkip">
+              <i class="ph ph-skip-back"></i> Skip
+            </button>
+            <div class="q-progress-dots" id="qProgressDots"></div>
+            <button class="btn-ghost btn-next" id="btnNext" disabled>
+              Next <i class="ph ph-arrow-right"></i>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- ── FEEDBACK ZONE V2 (premium reveal) ── -->
-      <div class="feedback-zone-v2" id="feedbackZone">
-        <div class="feedback-card-v2">
+      <!-- RIGHT: Answer Panel -->
+      <div class="answer-panel" id="answerPanel">
 
-          <!-- Header strip -->
-          <div class="fb-header-strip">
-            <span class="fb-header-label">AI Evaluation Result</span>
-            <div class="fb-header-actions">
-              <button class="fb-close-btn" id="btnCloseFeedback" title="Back to editor">✕</button>
+        <!-- Answer Zone -->
+        <div class="answer-zone glass-card" id="answerZone">
+          <div class="editor-topbar">
+            <div class="editor-dots">
+              <span class="ed-dot red"></span>
+              <span class="ed-dot yellow"></span>
+              <span class="ed-dot green"></span>
+            </div>
+            <span class="editor-filename">answer.md</span>
+            <div class="editor-timer" id="editorTimer">
+              <i class="ph ph-timer"></i>
+              <span id="timerDisplay">00:00</span>
             </div>
           </div>
 
-          <!-- Scrollable body -->
-          <div class="fb-body">
-
-            <!-- ── Hero Row: ring + badge + bars ── -->
-            <div class="fb-hero-row">
-
-              <!-- Score Ring -->
-              <div class="score-ring-wrap">
-                <svg class="score-ring-svg" viewBox="0 0 120 120">
-                  <defs>
-                    <linearGradient id="feedbackGrad" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#00d4ff"/>
-                      <stop offset="100%" stop-color="#7b2ff7"/>
-                    </linearGradient>
-                    <linearGradient id="feedbackGradGreen" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#00ff88"/>
-                      <stop offset="100%" stop-color="#00d4ff"/>
-                    </linearGradient>
-                    <linearGradient id="feedbackGradYellow" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#ffc107"/>
-                      <stop offset="100%" stop-color="#ff7b00"/>
-                    </linearGradient>
-                    <linearGradient id="feedbackGradRed" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#ff4d6d"/>
-                      <stop offset="100%" stop-color="#c91a3a"/>
-                    </linearGradient>
-                  </defs>
-                  <circle class="ring-track" cx="60" cy="60" r="55"/>
-                  <circle class="ring-progress" id="ringProgress" cx="60" cy="60" r="55"
-                    stroke-dasharray="345.4" stroke-dashoffset="345.4"/>
-                </svg>
-                <div class="score-center">
-                  <span class="score-num" id="scoreBig">0</span>
-                  <span class="score-denom">/100</span>
-                </div>
-              </div>
-
-              <!-- Badge + Bars -->
-              <div class="fb-hero-right">
-
-                <!-- Performance badge -->
-                <div class="perf-badge" id="perfBadge">
-                  <span class="perf-badge-icon" id="badgeEmoji">
-                    <i class="ph-fill ph-info" style="color:#00d4ff"></i>
-                  </span>
-                  <div class="perf-badge-text">
-                    <div class="perf-badge-name" id="badgeLabel">Good</div>
-                    <div class="perf-badge-range" id="badgeRange">65 – 84</div>
-                  </div>
-                </div>
-
-                <!-- Sub-score bars -->
-                <div class="subscore-bars">
-                  <div class="ssbar-row">
-                    <span class="ssbar-label">Relevance</span>
-                    <div class="ssbar-track"><div class="ssbar-fill bar-cyan" id="barRelevance"></div></div>
-                    <span class="ssbar-pct" id="pctRelevance">0%</span>
-                  </div>
-                  <div class="ssbar-row">
-                    <span class="ssbar-label">Depth</span>
-                    <div class="ssbar-track"><div class="ssbar-fill bar-purple" id="barDepth"></div></div>
-                    <span class="ssbar-pct" id="pctDepth">0%</span>
-                  </div>
-                  <div class="ssbar-row">
-                    <span class="ssbar-label">Clarity</span>
-                    <div class="ssbar-track"><div class="ssbar-fill bar-green" id="barClarity"></div></div>
-                    <span class="ssbar-pct" id="pctClarity">0%</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="fb-divider"></div>
-
-            <!-- ── AI Feedback Blocks ── -->
-            <div class="fb-blocks-section">
-
-              <!-- What you did well -->
-              <div class="fb-block-v2 fb-block-positive" id="fbPositive">
-                <div class="fb-block-head">
-                  <div class="fb-block-head-icon">
-                    <i class="ph-fill ph-check-circle"></i>
-                  </div>
-                  <span>What You Did Well</span>
-                </div>
-                <div class="fb-block-body">
-                  <ul class="fb-block-list" id="listPositive"></ul>
-                </div>
-              </div>
-
-              <!-- What was missing -->
-              <div class="fb-block-v2 fb-block-missing" id="fbMissing">
-                <div class="fb-block-head">
-                  <div class="fb-block-head-icon">
-                    <i class="ph-fill ph-warning"></i>
-                  </div>
-                  <span>What Was Missing</span>
-                </div>
-                <div class="fb-block-body">
-                  <ul class="fb-block-list" id="listMissing"></ul>
-                </div>
-              </div>
-
-              <!-- Ideal approach -->
-              <div class="fb-block-v2 fb-block-ideal" id="fbIdeal">
-                <div class="fb-block-head">
-                  <div class="fb-block-head-icon">
-                    <i class="ph-fill ph-lightbulb"></i>
-                  </div>
-                  <span>Ideal Approach</span>
-                </div>
-                <div class="fb-block-body">
-                  <ul class="fb-block-list" id="listIdeal"></ul>
-                </div>
-              </div>
-
-            </div>
+          <div class="editor-body">
+            <div class="line-numbers" id="lineNumbers"><span>1</span></div>
+            <textarea
+              class="answer-textarea"
+              id="answerTextarea"
+              placeholder="Type your answer here...&#10;&#10;Be thorough — explain concepts, include examples, and consider edge cases."
+              spellcheck="false"
+            ></textarea>
           </div>
 
-          <!-- Footer actions -->
-          <div class="fb-footer-actions">
-            <button class="btn-try-again" id="btnTryAgain">
-              <i class="ph ph-arrow-counter-clockwise"></i>
-              Try Again
-            </button>
-            <button class="btn-next-question" id="btnNextQuestion">
-              Next Question
-              <i class="ph ph-arrow-right"></i>
-              <span class="btn-shimmer"></span>
-            </button>
+          <div class="editor-footer">
+            <div class="editor-stats">
+              <span id="wordCount">0 words</span>
+              <span class="stat-sep">·</span>
+              <span id="charCount">0 chars</span>
+              <span class="stat-sep">·</span>
+              <span class="stat-hint">Shift+Enter for new line</span>
+            </div>
+            <div class="editor-actions">
+              <button class="btn-clear" id="btnClear" title="Clear answer">
+                <i class="ph ph-x"></i> Clear
+              </button>
+              <button class="btn-evaluate btn-primary" id="btnEvaluate" disabled>
+                <span class="eval-spinner" id="evalSpinner" style="display:none;"><i class="ph ph-spinner-gap"></i></span>
+                <span id="evalLabel">Evaluate My Answer</span>
+                <span class="btn-shimmer"></span>
+              </button>
+            </div>
           </div>
-
         </div>
-      </div>
-    </div>
-  </main>
 
-  <footer class="footer">
+        <!-- ── FEEDBACK ZONE ── -->
+        <div class="feedback-zone-v2" id="feedbackZone">
+          <div class="feedback-card-v2">
+
+            <!-- Header -->
+            <div class="fb-header-strip">
+              <span class="fb-header-label">AI Evaluation Result</span>
+              <div class="fb-header-actions">
+                <button class="fb-close-btn" id="btnCloseFeedback" title="Back to editor">✕</button>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="fb-body">
+
+              <!-- Hero Row: ring + badge + bars -->
+              <div class="fb-hero-row">
+                <div class="score-ring-wrap">
+                  <svg class="score-ring-svg" viewBox="0 0 120 120">
+                    <defs>
+                      <linearGradient id="feedbackGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#00d4ff"/>
+                        <stop offset="100%" stop-color="#7b2ff7"/>
+                      </linearGradient>
+                      <linearGradient id="feedbackGradGreen" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#00ff88"/>
+                        <stop offset="100%" stop-color="#00d4ff"/>
+                      </linearGradient>
+                      <linearGradient id="feedbackGradYellow" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#ffc107"/>
+                        <stop offset="100%" stop-color="#ff7b00"/>
+                      </linearGradient>
+                      <linearGradient id="feedbackGradRed" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#ff4d6d"/>
+                        <stop offset="100%" stop-color="#c91a3a"/>
+                      </linearGradient>
+                    </defs>
+                    <circle class="ring-track" cx="60" cy="60" r="55"/>
+                    <circle class="ring-progress" id="ringProgress" cx="60" cy="60" r="55"
+                      stroke-dasharray="345.4" stroke-dashoffset="345.4"/>
+                  </svg>
+                  <div class="score-center">
+                    <span class="score-num" id="scoreBig">0</span>
+                    <span class="score-denom">/100</span>
+                  </div>
+                </div>
+
+                <div class="fb-hero-right">
+                  <div class="perf-badge" id="perfBadge">
+                    <span class="perf-badge-icon" id="badgeEmoji">
+                      <i class="ph-fill ph-info" style="color:#00d4ff"></i>
+                    </span>
+                    <div class="perf-badge-text">
+                      <div class="perf-badge-name" id="badgeLabel">Good</div>
+                      <div class="perf-badge-range" id="badgeRange">65 – 84</div>
+                    </div>
+                  </div>
+
+                  <div class="subscore-bars">
+                    <div class="ssbar-row">
+                      <span class="ssbar-label">Relevance</span>
+                      <div class="ssbar-track"><div class="ssbar-fill bar-cyan" id="barRelevance"></div></div>
+                      <span class="ssbar-pct" id="pctRelevance">0%</span>
+                    </div>
+                    <div class="ssbar-row">
+                      <span class="ssbar-label">Depth</span>
+                      <div class="ssbar-track"><div class="ssbar-fill bar-purple" id="barDepth"></div></div>
+                      <span class="ssbar-pct" id="pctDepth">0%</span>
+                    </div>
+                    <div class="ssbar-row">
+                      <span class="ssbar-label">Clarity</span>
+                      <div class="ssbar-track"><div class="ssbar-fill bar-green" id="barClarity"></div></div>
+                      <span class="ssbar-pct" id="pctClarity">0%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fb-divider"></div>
+
+              <!-- Feedback blocks -->
+              <div class="fb-blocks-section">
+                <div class="fb-block-v2 fb-block-positive" id="fbPositive">
+                  <div class="fb-block-head">
+                    <div class="fb-block-head-icon"><i class="ph-fill ph-check-circle"></i></div>
+                    <span>What You Did Well</span>
+                  </div>
+                  <div class="fb-block-body">
+                    <ul class="fb-block-list" id="listPositive"></ul>
+                  </div>
+                </div>
+
+                <div class="fb-block-v2 fb-block-missing" id="fbMissing">
+                  <div class="fb-block-head">
+                    <div class="fb-block-head-icon"><i class="ph-fill ph-warning"></i></div>
+                    <span>What Was Missing</span>
+                  </div>
+                  <div class="fb-block-body">
+                    <ul class="fb-block-list" id="listMissing"></ul>
+                  </div>
+                </div>
+
+                <div class="fb-block-v2 fb-block-ideal" id="fbIdeal">
+                  <div class="fb-block-head">
+                    <div class="fb-block-head-icon"><i class="ph-fill ph-lightbulb"></i></div>
+                    <span>Ideal Approach</span>
+                  </div>
+                  <div class="fb-block-body">
+                    <ul class="fb-block-list" id="listIdeal"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer actions -->
+            <div class="fb-footer-actions">
+              <button class="btn-try-again" id="btnTryAgain">
+                <i class="ph ph-arrow-counter-clockwise"></i>
+                Try Again
+              </button>
+              <button class="btn-next-question" id="btnNextQuestion">
+                Next Question
+                <i class="ph ph-arrow-right"></i>
+                <span class="btn-shimmer"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div><!-- end .practice-wrapper -->
+
+  <footer class="arena-footer">
     <p>© 2026 iPrep — <a href="index.html">Home</a> · <a href="how-it-works.html">How It Works</a> · <a href="progress.html">Progress</a></p>
   </footer>
 
