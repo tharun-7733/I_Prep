@@ -2,7 +2,7 @@
 
 **I_Prep** is an AI-powered interview preparation platform designed to help candidates practice, receive interactive feedback, and track their progress over time. The platform features a premium dark-themed, glassmorphism UI with a seamless user experience.
 
-## 🚀 Features
+## Features
 
 - **Hero Landing Page:** A stunning, dark-themed hero section with animated elements.
 - **Authentication:** Robust login and signup flow with session persistence.
@@ -12,14 +12,14 @@
 - **Leaderboard:** See how you rank against other candidates.
 - **User Profile:** Manage your account and view past session reports.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend:** Vanilla HTML, CSS, JavaScript (No heavy frameworks, highly optimized)
   - *Styling:* Custom CSS with dark-mode glassmorphism aesthetics.
 - **Backend:** Python / FastAPI (Handles AI evaluation and API routing)
 - **Data Storage:** Local Storage (for session tracking & offline sync), Backend Database integrations.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 I_Prep/
@@ -86,9 +86,9 @@ python -m http.server 3000
 npx serve -p 3000
 ```
 
-Navigate to `http://localhost:3000` in your browser.
+Navigate to `http://51.21.161.230/` in your browser.
 
-## 🧑‍💻 Usage Flow
+## Usage Flow
 
 1. **Sign Up / Login:** Create an account to persist your progress.
 2. **Practice:** Navigate to the Practice Arena and answer the AI-generated interview questions.
