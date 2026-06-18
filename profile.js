@@ -81,12 +81,20 @@ $('btnSaveSettings')?.addEventListener('click', () => {
   showToast('✅ Settings saved!');
 });
 
-// ── Load saved settings ────────────────────────────────────────────────────
+// ── Load saved settings & Google Auth User ─────────────────────────────────
+const authUser = JSON.parse(localStorage.getItem('iprep_user') || 'null');
 const saved = JSON.parse(localStorage.getItem('iprep_settings') || '{}');
-if(saved.name){ $('setName').value=saved.name; $('profileName').textContent=saved.name; $('avatarCircle').textContent=saved.name[0]?.toUpperCase()||'T'; }
-if(saved.email) $('setEmail').value=saved.email;
-if(saved.role) $('setRole').value=saved.role;
-if(saved.difficulty) $('setDiff').value=saved.difficulty;
+
+const finalName = authUser?.name || saved.name || 'User';
+const finalEmail = authUser?.email || saved.email || '';
+
+$('setName').value = finalName;
+$('profileName').textContent = finalName;
+$('avatarCircle').textContent = finalName[0]?.toUpperCase() || 'U';
+
+if(finalEmail) $('setEmail').value = finalEmail;
+if(saved.role) $('setRole').value = saved.role;
+if(saved.difficulty) $('setDiff').value = saved.difficulty;
 
 function showToast(msg) {
   const el = document.createElement('div');
