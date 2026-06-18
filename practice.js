@@ -1,5 +1,5 @@
 /* practice.js — Practice Arena Logic */
-const API = 'http://localhost:8000/api';
+const API = '/api';
 
 // ── State ──────────────────────────────────────────────────────────────────
 let questions = [], currentIdx = 0, sessionActive = false;

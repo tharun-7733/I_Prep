@@ -1,5 +1,5 @@
 /* progress.js */
-const API = 'http://localhost:8000/api';
+const API = '/api';
 const $ = id => document.getElementById(id);
 
 window.addEventListener('scroll', () => $('navbar').classList.toggle('scrolled', scrollY > 30));
