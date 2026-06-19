@@ -1,6 +1,6 @@
 /* login.js */
 const $ = id => document.getElementById(id);
-const supabase = window.supabaseClient;
+
 
 // ── Brand Canvas Particles ─────────────────────────────────────────────────
 const canvas = $('brandCanvas');
