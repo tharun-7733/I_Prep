@@ -23,7 +23,16 @@ document.querySelectorAll('.ptab').forEach(btn => {
 
 // ── Mini Line Chart ────────────────────────────────────────────────────────
 function drawMiniChart() {
-  const scores = [70, 88, 56, 65, 91, 74, 82];
+  const historyRaw = localStorage.getItem('iprep_history');
+  let scores = [];
+  if (historyRaw) {
+    try {
+      const history = JSON.parse(historyRaw);
+      scores = history.slice(0, 10).map(h => h.score).reverse();
+    } catch(e) {}
+  }
+  if (scores.length < 2) scores = [0, 0]; // Need at least two points to draw a line
+
   const W=500, H=120, padL=20, padR=20, padT=15, padB=20;
   const iW=W-padL-padR, iH=H-padT-padB;
   const n = scores.length;
