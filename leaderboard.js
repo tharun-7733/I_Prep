@@ -31,22 +31,41 @@ resize(); initParticles(); animCanvas();
 window.addEventListener('resize',()=>{ resize(); initParticles(); });
 
 // ── Leaderboard Data ───────────────────────────────────────────────────────
-const LEADERBOARD = [
-  {rank:1,username:'aditya_sys',role:'System Designer',sessions:42,avg_score:94,badge:'Excellent',streak:14,isCurrentUser:false},
-  {rank:2,username:'priya_backend',role:'Backend Engineer',sessions:38,avg_score:91,badge:'Excellent',streak:10,isCurrentUser:false},
-  {rank:3,username:'karan_fs',role:'Full Stack Developer',sessions:35,avg_score:89,badge:'Excellent',streak:7,isCurrentUser:false},
-  {rank:4,username:'neha_ml',role:'Backend Engineer',sessions:29,avg_score:85,badge:'Excellent',streak:5,isCurrentUser:false},
-  {rank:5,username:'rahul_dsa',role:'DSA / Competitive Programming',sessions:27,avg_score:83,badge:'Good',streak:12,isCurrentUser:false},
-  {rank:6,username:'you',role:'Backend Engineer',sessions:7,avg_score:75,badge:'Good',streak:3,isCurrentUser:true},
-  {rank:7,username:'divya_front',role:'Frontend Developer',sessions:22,avg_score:78,badge:'Good',streak:4,isCurrentUser:false},
-  {rank:8,username:'arjun_devops',role:'DevOps Engineer',sessions:19,avg_score:76,badge:'Good',streak:2,isCurrentUser:false},
-  {rank:9,username:'sneha_full',role:'Full Stack Developer',sessions:17,avg_score:71,badge:'Good',streak:0,isCurrentUser:false},
-  {rank:10,username:'vikram_sys',role:'System Designer',sessions:15,avg_score:69,badge:'Good',streak:1,isCurrentUser:false},
-];
-
+let LEADERBOARD = [];
 const COLORS = ['#00d4ff','#7b2ff7','#00ff88','#ffcc00','#ff4d6d','#f59e0b','#3b82f6','#ec4899','#10b981','#8b5cf6'];
 
+function updatePodium(data) {
+  // Populate the podium if we have at least 3
+  const p1 = data[0], p2 = data[1], p3 = data[2];
+  
+  if (p1) {
+    $('p1user').textContent = p1.username;
+    $('p1score').textContent = p1.avg_score;
+    $('p1sessions').textContent = p1.sessions + ' sessions';
+    $('p1badge').textContent = p1.badge;
+    $('p1avatar').textContent = p1.username[0].toUpperCase();
+    $('podium1').style.visibility = 'visible';
+  }
+  if (p2) {
+    $('p2user').textContent = p2.username;
+    $('p2score').textContent = p2.avg_score;
+    $('p2sessions').textContent = p2.sessions + ' sessions';
+    $('p2badge').textContent = p2.badge;
+    $('p2avatar').textContent = p2.username[0].toUpperCase();
+    $('podium2').style.visibility = 'visible';
+  }
+  if (p3) {
+    $('p3user').textContent = p3.username;
+    $('p3score').textContent = p3.avg_score;
+    $('p3sessions').textContent = p3.sessions + ' sessions';
+    $('p3badge').textContent = p3.badge;
+    $('p3avatar').textContent = p3.username[0].toUpperCase();
+    $('podium3').style.visibility = 'visible';
+  }
+}
+
 function renderTable(data) {
+  updatePodium(data);
   const tbody = $('lbTableBody');
   tbody.innerHTML = data.slice(3).map((r, i) => {
     const badgeClass = r.badge === 'Excellent' ? 'badge-excellent' : '';
@@ -75,15 +94,53 @@ function renderTable(data) {
   $('lbCount').textContent = `${data.length} performers`;
 }
 
+async function fetchLeaderboard() {
+  try {
+    const res = await fetch('/api/leaderboard');
+    if (res.ok) {
+      LEADERBOARD = await res.json();
+    }
+  } catch (error) {
+    console.warn('Backend /api/leaderboard not available yet. Falling back to local progress history.');
+  }
+
+  if (!LEADERBOARD || LEADERBOARD.length === 0) {
+    // Fallback: Populate with local history data so it's not totally empty
+    const authUser = JSON.parse(localStorage.getItem('iprep_user') || 'null');
+    const saved = JSON.parse(localStorage.getItem('iprep_settings') || '{}');
+    const historyRaw = localStorage.getItem('iprep_history');
+    
+    let username = authUser?.name || saved.name || 'You';
+    let role = saved.role || 'Backend Engineer';
+    let sessions = 0, avg_score = 0;
+    
+    if (historyRaw) {
+      try {
+        const history = JSON.parse(historyRaw);
+        sessions = history.length;
+        if (sessions > 0) {
+          avg_score = Math.round(history.reduce((sum, h) => sum + h.score, 0) / sessions);
+        }
+      } catch(e) {}
+    }
+    
+    // Simulate some realistic competition using local data
+    LEADERBOARD = [
+      {rank: 1, username: username, role: role, sessions: sessions, avg_score: avg_score, badge: (avg_score >= 90 ? 'Excellent' : avg_score >= 70 ? 'Good' : avg_score >= 50 ? 'Needs Improvement' : 'Weak'), streak: 1, isCurrentUser: true}
+    ];
+  }
+  
+  renderTable(LEADERBOARD);
+}
+
 // ── Tabs ───────────────────────────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    // Shuffle scores slightly for effect
-    const shuffled = LEADERBOARD.map(r => ({...r, avg_score: Math.max(50, r.avg_score + Math.round((Math.random()-0.5)*6))}));
-    shuffled.sort((a,b) => b.avg_score - a.avg_score);
-    shuffled.forEach((r,i) => r.rank = i+1);
+    // For a real app, this might trigger another API fetch based on the time filter.
+    // Here we just re-render or simulate
+    const shuffled = LEADERBOARD.map(r => ({...r}));
     renderTable(shuffled);
   });
 });
@@ -96,6 +153,6 @@ $('roleFilter').addEventListener('change', () => {
 });
 
 // ── Init ───────────────────────────────────────────────────────────────────
-renderTable(LEADERBOARD);
+fetchLeaderboard();
 // Badge strip (add hist-badge class shim)
 document.head.insertAdjacentHTML('beforeend',`<style>.hist-badge{display:inline-block;font-size:.68rem;font-family:var(--font-mono);font-weight:700;padding:3px 9px;border-radius:5px}</style>`);
