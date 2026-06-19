@@ -97,7 +97,7 @@ $('loginForm').addEventListener('submit', async e => {
   $('loginLabel').textContent='Logging in…';
   $('btnLogin').disabled=true;
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await window.supabaseClient.auth.signInWithPassword({
     email: email,
     password: pw,
   });
@@ -133,7 +133,7 @@ $('signupForm').addEventListener('submit', async e => {
   $('signupLabel').textContent='Creating account…';
   $('btnSignup').disabled=true;
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data, error } = await window.supabaseClient.auth.signUp({
     email: email,
     password: pw,
     options: {
@@ -164,7 +164,7 @@ $('signupForm').addEventListener('submit', async e => {
 
   // Insert into users table
   if (data.user) {
-    const { error: dbError } = await supabase.from('users').insert({
+    const { error: dbError } = await window.supabaseClient.from('users').insert({
       id: data.user.id,
       username: name,
       role_focus: role

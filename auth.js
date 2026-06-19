@@ -23,7 +23,7 @@ async function handleSession(session) {
       `;
 
       document.getElementById('btnLogout').addEventListener('click', async () => {
-        await supabase.auth.signOut();
+        await window.supabaseClient.auth.signOut();
         window.location.href = 'index.html';
       });
     }
@@ -40,12 +40,12 @@ async function handleSession(session) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Ensure supabase is loaded
-  if (typeof supabase === 'undefined') return;
+  if (typeof window.supabaseClient === 'undefined') return;
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await window.supabaseClient.auth.getSession();
   handleSession(session);
 
-  supabase.auth.onAuthStateChange((_event, session) => {
+  window.supabaseClient.auth.onAuthStateChange((_event, session) => {
     handleSession(session);
   });
 });
