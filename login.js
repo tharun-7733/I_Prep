@@ -96,9 +96,19 @@ $('loginForm').addEventListener('submit', async e => {
   $('loginLabel').textContent='Logging in…';
   $('btnLogin').disabled=true;
 
-  await new Promise(r=>setTimeout(r,1200));
-  // Save mock session
-  localStorage.setItem('iprep_user', JSON.stringify({email, name: email.split('@')[0]}));
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: pw,
+  });
+
+  if (error) {
+    alert(error.message);
+    $('loginSpinner').style.display='none';
+    $('loginLabel').textContent='Login';
+    $('btnLogin').disabled=false;
+    return;
+  }
+
   window.location.href = 'practice.html';
 });
 
@@ -122,18 +132,52 @@ $('signupForm').addEventListener('submit', async e => {
   $('signupLabel').textContent='Creating account…';
   $('btnSignup').disabled=true;
 
-  await new Promise(r=>setTimeout(r,1400));
-  localStorage.setItem('iprep_user', JSON.stringify({name, email, role}));
-  localStorage.setItem('iprep_settings', JSON.stringify({name, email, role}));
-  window.location.href = 'practice.html';
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: pw,
+    options: {
+      data: {
+        name: name,
+        role: role
+      }
+    }
+  });
+
+  if (error) {
+    alert(error.message);
+    $('signupSpinner').style.display='none';
+    $('signupLabel').textContent='Create Account';
+    $('btnSignup').disabled=false;
+    return;
+  }
+
+  // Check if we need to verify email
+  if (data.user && data.user.identities && data.user.identities.length === 0) {
+      alert("This email is already registered. Please log in.");
+      switchMode('login');
+      $('signupSpinner').style.display='none';
+      $('signupLabel').textContent='Create Account';
+      $('btnSignup').disabled=false;
+      return;
+  }
+
+  // Insert into users table
+  if (data.user) {
+    const { error: dbError } = await supabase.from('users').insert({
+      id: data.user.id,
+      username: name,
+      role_focus: role
+    });
+    if (dbError) {
+      console.error("Error creating user profile in db:", dbError);
+    }
+  }
+
+  alert('Account created! If email confirmation is enabled, please check your inbox. Otherwise, you can now log in.');
+  switchMode('login');
+  $('signupSpinner').style.display='none';
+  $('signupLabel').textContent='Create Account';
+  $('btnSignup').disabled=false;
 });
 
-// ── Google (mock) ──────────────────────────────────────────────────────────
-$('btnGoogle').addEventListener('click',()=>{
-  $('btnGoogle').textContent='Connecting…';
-  $('btnGoogle').disabled=true;
-  setTimeout(()=>{
-    localStorage.setItem('iprep_user', JSON.stringify({name:'Google User',email:'user@gmail.com'}));
-    window.location.href='practice.html';
-  }, 1000);
-});
+

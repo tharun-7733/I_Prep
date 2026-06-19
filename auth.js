@@ -1,14 +1,15 @@
 /* auth.js — Global authentication state & navbar injection */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const userJson   = localStorage.getItem('iprep_user');
+async function handleSession(session) {
   const navActions = document.querySelector('.nav-actions');
+  const path        = window.location.pathname;
+  const isProtected = ['/practice.html', '/progress.html', '/profile.html'].some(p => path.endsWith(p) || p === '/practice.html' && path === '/'); // Handle root if needed
+  const isAuthPage  = path.endsWith('/login.html');
 
-  /* ── Logged-in state ── */
-  if (userJson && navActions) {
-    try {
-      const user = JSON.parse(userJson);
-      const name = user.name || (user.email ? user.email.split('@')[0] : 'User');
+  if (session) {
+    if (navActions) {
+      const user = session.user;
+      const name = user.user_metadata?.name || user.email.split('@')[0];
       const initials = name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
       navActions.innerHTML = `
@@ -21,25 +22,30 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>
       `;
 
-      document.getElementById('btnLogout').addEventListener('click', () => {
-        localStorage.removeItem('iprep_user');
+      document.getElementById('btnLogout').addEventListener('click', async () => {
+        await supabase.auth.signOut();
         window.location.href = 'index.html';
       });
+    }
 
-    } catch (e) {
-      console.error('Failed to parse user session', e);
+    if (isAuthPage) {
+      window.location.href = 'practice.html';
+    }
+  } else {
+    if (isProtected) {
+      window.location.href = 'login.html';
     }
   }
+}
 
-  /* ── Route protection ── */
-  const path        = window.location.pathname;
-  const isProtected = ['/practice.html', '/progress.html', '/profile.html']
-                        .some(p => path.endsWith(p));
-  const isAuthPage  = path.endsWith('/login.html');
+document.addEventListener('DOMContentLoaded', async () => {
+  // Ensure supabase is loaded
+  if (typeof supabase === 'undefined') return;
 
-  if (isProtected && !userJson) {
-    window.location.href = 'login.html';
-  } else if (isAuthPage && userJson) {
-    window.location.href = 'practice.html';
-  }
+  const { data: { session } } = await supabase.auth.getSession();
+  handleSession(session);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    handleSession(session);
+  });
 });
