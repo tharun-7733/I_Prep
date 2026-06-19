@@ -102,7 +102,7 @@ def _generate_one(role: str, category: str, difficulty: str) -> str:
         outputs = _MODEL.generate(
             inputs.input_ids,
             max_new_tokens=80,
-            num_beams=4,
+            num_beams=1,
             no_repeat_ngram_size=2,
             early_stopping=True,
             do_sample=False,
