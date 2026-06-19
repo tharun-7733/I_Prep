@@ -221,7 +221,7 @@ def _clarity_score(answer: str) -> int:
 
 # ── Feedback generator ───────────────────────────────────────────────────────
 
-def _build_feedback(pred_class: int, relevance: int, depth: int, clarity: int, question: str) -> dict:
+def _build_feedback(pred_class: int, relevance: int, depth: int, clarity: int, question: str, sent_count: int) -> dict:
     """Generate structured feedback based on model prediction and heuristic scores."""
     positives, missing, ideal = [], [], []
 
@@ -237,13 +237,19 @@ def _build_feedback(pred_class: int, relevance: int, depth: int, clarity: int, q
     if relevance < 60:
         missing.append("Answer doesn't closely address what was asked — re-read the question")
     if depth < 50:
-        missing.append("Too brief — expand on concepts with examples or step-by-step explanations")
+        if sent_count < 5:
+            missing.append("Too brief — expand on concepts with examples or step-by-step explanations")
+        else:
+            missing.append("Add more technical details or specific examples to support your points")
     if clarity < 50:
         missing.append("Improve sentence structure — use shorter, clearer sentences")
     if pred_class == 0:
         missing.append("Core technical concepts appear to be missing or underdeveloped")
     elif pred_class == 1:
-        missing.append("Add more depth: aim for 5–8 well-developed sentences covering key aspects")
+        if sent_count < 5:
+            missing.append("Add more depth: aim for 5–8 well-developed sentences covering key aspects")
+        else:
+            missing.append("Refine your explanation: ensure you define key terms and concepts clearly")
 
     # Question-specific ideal points
     q_lower = question.lower()
@@ -331,6 +337,20 @@ def evaluate_answer(answer: str, question: str, category: str = "") -> dict:
     relevance = _relevance_score(answer, question)
     depth     = _depth_score(answer)
     clarity   = _clarity_score(answer)
+    sent_count = _sentence_count(answer)
+
+    # Correction layer: The trained XGBoost model was trained with sentence count
+    # directly as a feature, which penalizes answers with >= 9 sentences (class 1)
+    # and >= 12 sentences (class 0). We override this penalization for long, 
+    # high-quality, relevant answers to make the scoring system monotonic and logical.
+    if sent_count >= 5:
+        if pred_class < 2:
+            if relevance >= 50 and depth >= 60:
+                pred_class = 2
+                proba = np.array([0.01, 0.09, 0.90])
+            elif relevance >= 40 and depth >= 45 and pred_class == 0:
+                pred_class = 1
+                proba = np.array([0.05, 0.85, 0.10])
 
     # Blend model confidence with heuristics for a smooth 0–100 overall score
     # model_score peaks at 100 when proba[good]=1.0
@@ -357,7 +377,7 @@ def evaluate_answer(answer: str, question: str, category: str = "") -> dict:
         "clarity":       clarity,
         "badge":         badge,
         "badge_config":  BADGE_CONFIG[badge],
-        "feedback":      _build_feedback(pred_class, relevance, depth, clarity, question),
+        "feedback":      _build_feedback(pred_class, relevance, depth, clarity, question, sent_count),
         "probabilities": {
             "weak":             round(float(proba[0]), 3),
             "needs_improvement": round(float(proba[1]), 3),
