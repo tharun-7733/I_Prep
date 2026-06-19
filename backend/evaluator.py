@@ -339,24 +339,27 @@ def evaluate_answer(answer: str, question: str, category: str = "") -> dict:
     clarity   = _clarity_score(answer)
     sent_count = _sentence_count(answer)
 
-    # Correction layer: The trained XGBoost model was trained with sentence count
-    # directly as a feature, which penalizes answers with >= 9 sentences (class 1)
-    # and >= 12 sentences (class 0). We override this penalization for long, 
-    # high-quality, relevant answers to make the scoring system monotonic and logical.
-    if sent_count >= 5:
-        if pred_class < 2:
-            if relevance >= 50 and depth >= 60:
-                pred_class = 2
-                proba = np.array([0.01, 0.09, 0.90])
-            elif relevance >= 40 and depth >= 45 and pred_class == 0:
-                pred_class = 1
-                proba = np.array([0.05, 0.85, 0.10])
+    # Correction layer: The trained XGBoost model encodes sentence count as a feature
+    # which means long answers (>=9 sentences) get penalized regardless of quality.
+    # We override the model class for any answer that is substantive by heuristics.
+    if sent_count >= 3:
+        if pred_class < 2 and relevance >= 40 and depth >= 55:
+            pred_class = 2
+            proba = np.array([0.01, 0.09, 0.90])
+        elif pred_class == 0 and (relevance >= 30 or depth >= 40):
+            pred_class = 1
+            proba = np.array([0.05, 0.85, 0.10])
 
-    # Blend model confidence with heuristics for a smooth 0–100 overall score
-    # model_score peaks at 100 when proba[good]=1.0
+    # Blend model confidence with heuristics for a smooth 0–100 overall score.
+    # Weight heuristics more heavily (60%) so the XGBoost model (40%) cannot cap
+    # scores below 50% when the model mislabels a qualitatively good answer.
     model_score = proba[2] * 100 + proba[1] * 55 + proba[0] * 15
-    overall     = int(model_score * 0.50 + relevance * 0.20 + depth * 0.20 + clarity * 0.10)
-    overall     = max(5, min(100, overall))
+    heuristic_score = relevance * 0.35 + depth * 0.40 + clarity * 0.25
+    overall = int(model_score * 0.40 + heuristic_score * 0.60)
+
+    # Ensure a minimum floor: if the heuristics are strong, the score must reflect it
+    heuristic_floor = int(heuristic_score * 0.70)
+    overall = max(5, max(heuristic_floor, min(100, overall)))
 
     # Derive badge from overall score
     if overall >= 85:
