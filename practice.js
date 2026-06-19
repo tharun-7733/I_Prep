@@ -42,13 +42,12 @@ btnGenerate.addEventListener('click', async () => {
     loadQuestion(0);
     updateArenaStatus();
   } catch(e) {
-    showToast('⚠️ Could not reach the server. Make sure the backend is running at localhost:8000.');
+    showToast('Could not reach the server. Make sure the backend is running at localhost:8000.');
   } finally {
     $('generateLabel').textContent = 'Generate Questions';
     btnGenerate.disabled = false;
   }
 });
-
 
 
 // ── Load Question ──────────────────────────────────────────────────────────

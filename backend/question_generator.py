@@ -22,7 +22,6 @@ _MODEL_NAME = "google/flan-t5-small"
 _TOKENIZER  = T5Tokenizer.from_pretrained(_MODEL_NAME)
 _MODEL      = T5ForConditionalGeneration.from_pretrained(_MODEL_NAME)
 _MODEL.eval()
-print("✅ FLAN-T5-small loaded.")
 
 # ── Prompt templates keyed by category ────────────────────────────────────
 _PROMPT_TEMPLATES = {
