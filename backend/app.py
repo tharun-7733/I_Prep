@@ -12,8 +12,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from evaluator import evaluate_answer
 import requests
+import os
 import os
 
 # ── Routes ────────────────────────────────────────────────────────────────────
@@ -56,21 +56,21 @@ def questions():
     difficulty = request.args.get("difficulty", "Medium")
     limit      = min(int(request.args.get("limit", 10)), 15)
 
-    flan_service_url = os.environ.get("FLAN_SERVICE_URL")
-    if not flan_service_url:
-        return jsonify({"error": "FLAN_SERVICE_URL not configured. Please set it in .env"}), 500
+    model_server_url = os.environ.get("MODEL_SERVER_URL")
+    if not model_server_url:
+        return jsonify({"error": "MODEL_SERVER_URL not configured. Please set it in .env"}), 500
 
     try:
         response = requests.get(
-            f"{flan_service_url}/api/generate",
+            f"{model_server_url}/generate",
             params={"role": role, "category": category, "difficulty": difficulty, "limit": limit},
             timeout=120
         )
         response.raise_for_status()
         return jsonify(response.json())
     except Exception as e:
-        app.logger.error(f"Failed to fetch questions from FLAN-T5 service: {e}")
-        return jsonify({"error": "Failed to generate questions. Model service might be down."}), 502
+        app.logger.error(f"Failed to fetch questions from Model Server: {e}")
+        return jsonify({"error": "Failed to generate questions. Model server might be down."}), 502
 
 
 @app.route("/api/evaluate", methods=["POST"])
@@ -87,8 +87,21 @@ def evaluate():
     if not question:
         return jsonify({"error": "Question is required"}), 400
 
-    result = evaluate_answer(answer, question, category)
-    return jsonify(result)
+    model_server_url = os.environ.get("MODEL_SERVER_URL")
+    if not model_server_url:
+        return jsonify({"error": "MODEL_SERVER_URL not configured. Please set it in .env"}), 500
+
+    try:
+        response = requests.post(
+            f"{model_server_url}/evaluate",
+            json={"answer": answer, "question": question, "category": category},
+            timeout=30
+        )
+        response.raise_for_status()
+        return jsonify(response.json())
+    except Exception as e:
+        app.logger.error(f"Failed to evaluate answer using Model Server: {e}")
+        return jsonify({"error": "Failed to evaluate answer. Model server might be down."}), 502
 
 
 @app.route("/api/sessions")
@@ -176,7 +189,6 @@ def progress():
 
 
 if __name__ == "__main__":
-    print("🚀 iPrep API running at http://localhost:8000")
-    print("   Questions : FLAN-T5-small")
-    print("   Evaluation: XGBoost classifier")
+    print("🚀 iPrep API Gateway running at http://localhost:8000")
+    print("   ML Models proxying to MODEL_SERVER_URL")
     app.run(port=8000, debug=True)
