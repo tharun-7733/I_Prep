@@ -89,12 +89,60 @@ def sessions():
 @app.route("/api/leaderboard")
 def leaderboard():
     """
-    Leaderboard requires persistent user accounts.
-    Returns an empty list until authentication is implemented.
+    Dynamically calculate the leaderboard by aggregating user sessions.
     """
-    period      = request.args.get("period", "weekly")
+    period = request.args.get("period", "weekly")
     role_filter = request.args.get("role", "All")
-    return jsonify({"leaderboard": [], "period": period, "total": 0})
+    
+    try:
+        from supabase_client import get_supabase_client
+        supabase = get_supabase_client()
+        
+        # 1. Fetch users
+        users_response = supabase.table("users").select("*").execute()
+        users = users_response.data
+        
+        # 2. Fetch sessions
+        sessions_response = supabase.table("sessions").select("*").execute()
+        sessions = sessions_response.data
+        
+        # 3. Aggregate data
+        leaderboard_data = []
+        for user in users:
+            user_sessions = [s for s in sessions if s.get("user_id") == user.get("id")]
+            
+            # Apply role filter if not "All"
+            if role_filter != "All" and user.get("role_focus") != role_filter:
+                continue
+                
+            session_count = len(user_sessions)
+            if session_count == 0:
+                continue # Skip users with no sessions
+                
+            avg_score = sum(s.get("score", 0) for s in user_sessions) / session_count
+            
+            leaderboard_data.append({
+                "id": user.get("id"),
+                "username": user.get("username", "Unknown"),
+                "role": user.get("role_focus", "Unknown"),
+                "sessions": session_count,
+                "avg_score": round(avg_score),
+                "streak": user.get("streak", 0),
+                "badge": user.get("top_badge", "Good")
+            })
+            
+        # 4. Sort by avg_score (descending) and sessions (descending)
+        leaderboard_data.sort(key=lambda x: (x["avg_score"], x["sessions"]), reverse=True)
+        
+        # 5. Assign ranks
+        for i, entry in enumerate(leaderboard_data):
+            entry["rank"] = i + 1
+            
+        return jsonify(leaderboard_data)
+        
+    except Exception as e:
+        print(f"Error fetching leaderboard: {e}")
+        return jsonify([])
 
 
 @app.route("/api/progress")
