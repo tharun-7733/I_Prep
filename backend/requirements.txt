@@ -1,8 +1,7 @@
+# EC2 API Gateway dependencies only — ML packages belong in requirements_ml.txt (MacBook)
 flask>=3.0.0
 flask-cors>=4.0.0
-scikit-learn>=1.4.0
-xgboost>=2.0.0
-numpy>=1.26.0
 requests>=2.31.0
 supabase>=2.3.0
 python-dotenv>=1.0.0
+gunicorn>=21.0.0

@@ -4,6 +4,7 @@ Runs locally on MacBook Air M1, exposing both XGBoost and FLAN-T5.
 """
 import os
 # Fix for macOS (M1/Apple Silicon) segmentation faults when running PyTorch + XGBoost + Flask
+os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
 
