@@ -97,6 +97,14 @@ $('loginForm').addEventListener('submit', async e => {
   $('loginLabel').textContent='Logging in…';
   $('btnLogin').disabled=true;
 
+  if (!window.supabaseClient) {
+    alert('Authentication service not available. Please refresh the page.');
+    $('loginSpinner').style.display='none';
+    $('loginLabel').textContent='Login';
+    $('btnLogin').disabled=false;
+    return;
+  }
+
   const { data, error } = await window.supabaseClient.auth.signInWithPassword({
     email: email,
     password: pw,

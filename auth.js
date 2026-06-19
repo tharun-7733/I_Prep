@@ -3,7 +3,7 @@
 async function handleSession(session) {
   const navActions = document.querySelector('.nav-actions');
   const path        = window.location.pathname;
-  const isProtected = ['/practice.html', '/progress.html', '/profile.html'].some(p => path.endsWith(p) || p === '/practice.html' && path === '/'); // Handle root if needed
+  const isProtected = ['/practice.html', '/progress.html', '/profile.html'].some(p => path.endsWith(p) || p === '/practice.html' && path === '/');
   const isAuthPage  = path.endsWith('/login.html');
 
   if (session) {
@@ -23,7 +23,7 @@ async function handleSession(session) {
       `;
 
       document.getElementById('btnLogout').addEventListener('click', async () => {
-        await window.supabaseClient.auth.signOut();
+        await window.supabaseClient?.auth?.signOut();
         window.location.href = 'index.html';
       });
     }
@@ -39,13 +39,25 @@ async function handleSession(session) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Ensure supabase is loaded
-  if (typeof window.supabaseClient === 'undefined') return;
+  // Wait for supabase CDN + supabase-client.js to be ready
+  const db = window.supabaseClient;
+  if (!db || !db.auth) {
+    console.error('[iPrep] Supabase client not available. Check supabase-client.js is loaded before auth.js.');
+    return;
+  }
 
-  const { data: { session } } = await window.supabaseClient.auth.getSession();
-  handleSession(session);
-
-  window.supabaseClient.auth.onAuthStateChange((_event, session) => {
+  try {
+    const { data: { session }, error } = await db.auth.getSession();
+    if (error) {
+      console.error('[iPrep] getSession error:', error.message);
+      return;
+    }
     handleSession(session);
-  });
+
+    db.auth.onAuthStateChange((_event, session) => {
+      handleSession(session);
+    });
+  } catch (err) {
+    console.error('[iPrep] Auth initialization failed:', err.message);
+  }
 });
