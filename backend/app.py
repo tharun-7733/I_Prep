@@ -13,7 +13,8 @@ app = Flask(__name__)
 CORS(app)
 
 from evaluator import evaluate_answer
-from question_generator import generate_questions
+import requests
+import os
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -47,16 +48,29 @@ def metadata():
 @app.route("/api/questions")
 def questions():
     """
-    Generate interview questions using FLAN-T5-small.
-    Query params: role, category, difficulty, limit (max 15)
+    Proxy request to external FLAN-T5 Microservice.
+    Query params: role, category, difficulty, limit
     """
     role       = request.args.get("role", "All")
     category   = request.args.get("category", "All")
     difficulty = request.args.get("difficulty", "Medium")
     limit      = min(int(request.args.get("limit", 10)), 15)
 
-    qs = generate_questions(role=role, category=category, difficulty=difficulty, n=limit)
-    return jsonify({"questions": qs, "total": len(qs)})
+    flan_service_url = os.environ.get("FLAN_SERVICE_URL")
+    if not flan_service_url:
+        return jsonify({"error": "FLAN_SERVICE_URL not configured. Please set it in .env"}), 500
+
+    try:
+        response = requests.get(
+            f"{flan_service_url}/api/generate",
+            params={"role": role, "category": category, "difficulty": difficulty, "limit": limit},
+            timeout=120
+        )
+        response.raise_for_status()
+        return jsonify(response.json())
+    except Exception as e:
+        app.logger.error(f"Failed to fetch questions from FLAN-T5 service: {e}")
+        return jsonify({"error": "Failed to generate questions. Model service might be down."}), 502
 
 
 @app.route("/api/evaluate", methods=["POST"])
