@@ -16,7 +16,7 @@
     <div class="brand-panel">
       <canvas id="brandCanvas" class="brand-canvas"></canvas>
       <div class="brand-content">
-        <a href="index.html" class="brand-logo">&lt;iPrep /&gt;lt;iPrep /&lt;iPrep /&gt;gt;</a>
+        <a href="index.html" class="brand-logo">&lt;iPrep /&gt;</a>
         <h2 class="brand-tagline">Practice.<br/>Evaluate.<br/><span class="gradient-text">Improve.</span></h2>
         <p class="brand-sub">Join 2,400+ engineers sharpening their skills with AI-powered interview prep.</p>
 
@@ -117,9 +117,10 @@
     </div>
   </div>
 
-  <script src="login.js"></script>
+  <!-- Load Supabase FIRST so it is available to all other scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
+  <script src="login.js"></script>
   <script src="auth.js"></script>
 </body>
 </html>
