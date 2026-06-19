@@ -1,2 +1,7 @@
 deploy.sh
+.env
 .env.example
+backend/venv/
+__pycache__/
+*.pyc
+.DS_Store

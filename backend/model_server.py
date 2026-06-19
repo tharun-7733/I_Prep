@@ -2,6 +2,11 @@
 model_server.py — Dedicated ML Inference Server
 Runs locally on MacBook Air M1, exposing both XGBoost and FLAN-T5.
 """
+import os
+# Fix for macOS (M1/Apple Silicon) segmentation faults when running PyTorch + XGBoost + Flask
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+os.environ["OBJC_DISABLE_INITIALIZE_FORK_SAFETY"] = "YES"
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
